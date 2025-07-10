@@ -1,13 +1,4 @@
-/**
- * Displays a custom message box as an alert, confirmation dialog, or input dialog.
- * @param {string} title - The title of the message box.
- * @param {string} message - The content message to display.
- * @param {Function} [onConfirmOrOkCallback=null] - Callback for OK/Yes. For input, this receives the input value.
- * @param {boolean} [isConfirm=false] - If true, displays 'Yes'/'No' buttons.
- * @param {string} [inputType=null] - If 'text' or 'number', displays an input field.
- * @param {string} [inputPlaceholder=''] - Placeholder for the input field.
- * @param {string} [inputLabel=''] - Label for the input field.
- */
+
 function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm = false, inputType = null, inputPlaceholder = '', inputLabel = '') {
     const messageBox = document.getElementById('messageBox');
     const messageBoxTitle = document.getElementById('messageBoxTitle');
@@ -94,10 +85,7 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
     }
 }
 
-/**
- * Triggers a shake animation on a given HTML element.
- * @param {HTMLElement} element - The element to apply the shake animation to.
- */
+
 function triggerShakeAnimation(element) {
     element.classList.add('shake');
     // Remove the shake class after the animation completes
@@ -106,11 +94,7 @@ function triggerShakeAnimation(element) {
     }, { once: true }); // Use { once: true } to automatically remove the listener after it fires
 }
 
-/**
- * Basic email format validation using a regular expression.
- * @param {string} email - The email string to validate.
- * @returns {boolean} True if the email format is valid, false otherwise.
- */
+
 function isValidEmail(email) {
     // A simple regex for email validation (can be more robust if needed)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

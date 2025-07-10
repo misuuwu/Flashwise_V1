@@ -1,5 +1,3 @@
-// This script handles the main application logic (dashboard, deck management, quiz)
-// It relies on functions defined in utils.js (showMessageBox, triggerShakeAnimation)
 
 // Firebase imports
 import { auth, db } from './firebase.js'; // Import auth and db from firebase.js
@@ -97,9 +95,7 @@ const randomWords = [
 
 
 // --- Global Page Visibility & Routing (Crucial for Firebase Auth) ---
-/**
- * Hides all main application pages.
- */
+
 function hideAllAppPages() {
     dashboardPage?.classList.add('hidden');
     quizPage?.classList.add('hidden');
@@ -109,10 +105,7 @@ function hideAllAppPages() {
     shareDeckModal?.classList.add('hidden');
 }
 
-/**
- * Shows a specified application page and hides others.
- * @param {HTMLElement} pageElement - The HTML element of the page to show.
- */
+
 function showAppPage(pageElement) {
     hideAllAppPages();
     pageElement?.classList.remove('hidden');
@@ -121,11 +114,7 @@ function showAppPage(pageElement) {
 // Flag to ensure event listeners are only attached once
 let hasInitializedDashboardListeners = false;
 
-/**
- * Initializes event listeners for static dashboard elements.
- * This function should be called only once after the user is authenticated
- * and the dashboard elements are available.
- */
+
 function initDashboardListeners() {
     if (hasInitializedDashboardListeners) return; // Prevent re-initialization
 
@@ -169,9 +158,7 @@ function initDashboardListeners() {
         });
     }
 
-    /**
-     * Handles the form submission for creating or updating a deck.
-     */
+   
     if (createDeckForm) {
         createDeckForm.addEventListener('submit', async (e) => {
             e.preventDefault(); // Prevent default form submission
@@ -321,9 +308,6 @@ function initDashboardListeners() {
         });
     }
 
-    /**
-     * Handles the form submission for creating or updating a card.
-     */
     if (createCardForm) {
         createCardForm.addEventListener('submit', async (e) => {
             e.preventDefault(); // Prevent default form submission
@@ -452,10 +436,7 @@ function initDashboardListeners() {
         });
     }
 
-    /**
-     * Toggles the flip state of the quiz card (shows question/answer).
-     * Also manages visibility of choice buttons and feedback in quiz mode.
-     */
+ 
     if (quizCard) {
         quizCard.addEventListener('click', () => {
             const card = currentQuizSet[currentCardIndex];
@@ -523,9 +504,7 @@ function initDashboardListeners() {
         });
     }
 
-    /**
-     * Navigates to the previous card in the current quiz/flashcard session.
-     */
+
     if (prevCardBtn) {
         prevCardBtn.addEventListener('click', () => {
             if (currentCardIndex > 0) {
@@ -537,9 +516,7 @@ function initDashboardListeners() {
         });
     }
 
-    /**
-     * Navigates to the next card in the current quiz/flashcard session.
-     */
+
     if (nextCardBtn) {
         nextCardBtn.addEventListener('click', () => {
             if (currentCardIndex < currentQuizSet.length - 1) {
@@ -551,11 +528,7 @@ function initDashboardListeners() {
         });
     }
 
-    /**
-     * Ends the current quiz/flashcard session.
-     * Displays a final message and returns to the dashboard.
-     * @param {string} [reason='manual'] - The reason for finishing the quiz ('time_up', 'cards_exhausted', 'manual').
-     */
+
     if (finishQuizBtn) {
         finishQuizBtn.addEventListener('click', () => {
             finishQuiz('manual'); // User clicked finish button
@@ -566,8 +539,7 @@ function initDashboardListeners() {
 }
 
 
-// --- Firebase Authentication State Listener ---
-// This listener runs every time the user's sign-in state changes.
+
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         // User is signed in
@@ -664,9 +636,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Flashcard Deck Management (now using Firestore) ---
 
-/**
- * Renders all personal flashcard sets dynamically on the dashboard.
- */
 async function renderFlashcardSets() {
     if (!myDecksContainer) return; // Exit if element doesn't exist on this page (e.g., on login.html)
     myDecksContainer.innerHTML = '<p class="py-4 text-center">Loading your decks...</p>';
@@ -824,12 +793,7 @@ function deleteFlashcardDeck(deckId) {
 
 
 // --- Create/Edit Deck Modal Logic ---
-// Event listener for createDeckBtn is moved into initDashboardListeners
 
-/**
- * Opens the modal for editing an existing deck. Populates the form with existing data.
- * @param {string} deckId - The ID of the deck to edit.
- */
 async function openEditDeckModal(deckId) {
     if (!auth.currentUser) {
         showMessageBox('Error', 'Please log in to edit decks.');
@@ -856,10 +820,6 @@ async function openEditDeckModal(deckId) {
 
 // --- Deck Management Page Logic ---
 
-/**
- * Opens the dedicated page for managing cards within a specific deck.
- * @param {string} deckId - The ID of the deck to manage.
- */
 async function openDeckManagementPage(deckId) {
     if (!auth.currentUser) {
         showMessageBox('Error', 'Please log in to manage decks.');
@@ -895,11 +855,7 @@ async function openDeckManagementPage(deckId) {
     }
 }
 
-/**
- * Renders the list of cards for the currently selected deck on the deck management page.
- * @param {string} deckId - The ID of the deck whose cards are to be rendered.
- * @param {Array<Object>} cards - The array of card objects for the deck.
- */
+
 function renderCardsInDeckManagement(deckId, cards) {
     if (!currentDeckCardsList) return;
     currentDeckCardsList.innerHTML = ''; // Clear existing card list
@@ -954,12 +910,7 @@ function renderCardsInDeckManagement(deckId, cards) {
     if (deckCardCountDisplay) deckCardCountDisplay.textContent = `${cards.length} cards`; // Update card count display
 }
 
-/**
- * Deletes a specific card from the current deck after user confirmation.
- * @param {string} deckId - The ID of the deck the card belongs to.
- * @param {number} cardIndex - The index of the card to delete within that deck.
- * @param {Array<Object>} currentCardsArray - The current array of cards from the deck document.
- */
+
 function deleteCardFromDeck(deckId, cardIndex, currentCardsArray) {
     showMessageBox('Confirm Delete', 'Are you sure you want to delete this card? This action cannot be undone.', async () => {
         try {
@@ -980,12 +931,7 @@ function deleteCardFromDeck(deckId, cardIndex, currentCardsArray) {
 
 
 // --- Create/Edit Card Modal Logic ---
-/**
- * Opens the modal for creating a new card or editing an existing one.
- * @param {Object} [cardData=null] - The card object to pre-populate the form if editing.
- * @param {string} [deckId=null] - The Firestore ID of the deck the card belongs to.
- * @param {number} [cardIndex=null] - The index of the card within the deck if editing.
- */
+
 function openCreateCardModal(cardData = null, deckId = null, cardIndex = null) {
     if (!auth.currentUser) {
         showMessageBox('Error', 'Please log in to add/edit cards.');
@@ -1024,10 +970,7 @@ function openCreateCardModal(cardData = null, deckId = null, cardIndex = null) {
 
 
 // --- Share Deck Functionality ---
-/**
- * Opens the share deck modal and generates/displays the shareable link.
- * @param {string} deckId - The ID of the deck to share.
- */
+
 async function openShareDeckModal(deckId) {
     if (!auth.currentUser) {
         showMessageBox('Error', 'Please log in to share decks.');
@@ -1048,9 +991,7 @@ async function openShareDeckModal(deckId) {
             await updateDoc(doc(db, "decks", deckId), { shareId: deckToShare.shareId });
         }
 
-        // Add/update the deck in the 'sharedDecks' collection
-        // Use setDoc with merge:true to create or update the document by its shareId
-        // This ensures shared decks are unique by shareId and easily retrievable
+
         await setDoc(doc(db, "sharedDecks", deckToShare.shareId), {
             name: deckToShare.name,
             defaultTimer: deckToShare.defaultTimer,
@@ -1072,10 +1013,7 @@ async function openShareDeckModal(deckId) {
 }
 
 
-/**
- * Imports a deck into the user's personal collection using a share ID.
- * @param {string} shareId - The unique ID of the shared deck to import.
- */
+
 async function importDeck(shareId) {
     if (!auth.currentUser) {
         showMessageBox('Error', 'You must be logged in to import decks.');
@@ -1121,11 +1059,7 @@ async function importDeck(shareId) {
 
 // --- Quiz/Flashcard Mode Core Functionality ---
 
-/**
- * Shuffles an array in place (Fisher-Yates algorithm).
- * @param {Array} array - The array to shuffle.
- * @returns {Array} The shuffled array (same array instance).
- */
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -1134,13 +1068,7 @@ function shuffleArray(array) {
     return array;
 }
 
-/**
- * Generates a list of multiple-choice answers, including the correct answer and distractors.
- * @param {string} correctAnswer - The correct answer string.
- * @param {Array<Object>} allCards - All cards in the deck, used to pick unique distractors.
- * @param {number} numDistractors - The number of incorrect answers to generate.
- * @returns {Array<string>} A shuffled array of choices.
- */
+
 function generateChoices(correctAnswer, allCards, numDistractors = 3) {
     let choices = [correctAnswer];
     let potentialDistractors = [];
@@ -1152,8 +1080,6 @@ function generateChoices(correctAnswer, allCards, numDistractors = 3) {
         }
     });
 
-    // Add some generic random words if specific deck answers are not enough or desired
-    // Filter out words that might be the correct answer or already picked from the deck
     let genericDistractors = randomWords.filter(word => {
         return word !== correctAnswer && !potentialDistractors.includes(word);
     });
@@ -1168,8 +1094,7 @@ function generateChoices(correctAnswer, allCards, numDistractors = 3) {
         }
     }
     
-    // If there aren't enough unique distractors (e.g., very small deck or many duplicate answers)
-    // ensure we still have at least 1-2 generic unique distractors up to numDistractors
+
     while (choices.length < (numDistractors + 1) && choices.length < (allCards.length + genericDistractors.length)) {
         const randomWord = genericDistractors[Math.floor(Math.random() * genericDistractors.length)];
         if (randomWord && !choices.includes(randomWord)) {
@@ -1185,12 +1110,7 @@ function generateChoices(correctAnswer, allCards, numDistractors = 3) {
 }
 
 
-/**
- * Starts a quiz or flashcard session with the given cards, timer, and mode.
- * @param {Array<Object>} cards - An array of card objects for the session. These cards should have `question`, `answer`, `imageUrl` (optional), and newly added `answered` and `correct` properties.
- * @param {number} timerSeconds - The duration of the quiz timer in seconds.
- * @param {string} mode - The mode of the session ('flashcards' or 'quiz').
- */
+
 function startQuiz(cards, timerSeconds, mode) {
     if (cards.length === 0) {
         showMessageBox('No Cards', 'This flashcard set has no cards to quiz on!');
@@ -1278,12 +1198,7 @@ function renderQuizCard() {
     updateQuizScoreDisplay(); // Update score
 }
 
-/**
- * Records the user's answer for the current quiz card.
- * Updates score, displays feedback, and automatically moves to the next card.
- * @param {boolean} isCorrect - True if the user's chosen answer is correct, false otherwise.
- * @param {string} chosenAnswer - The text of the answer chosen by the user.
- */
+
 function recordAnswer(isCorrect, chosenAnswer) {
     if (quizMode !== 'quiz' || currentQuizSet[currentCardIndex].answered) {
         // Only record if in 'quiz' mode and the current card hasn't been answered yet
@@ -1325,11 +1240,6 @@ function recordAnswer(isCorrect, chosenAnswer) {
 }
 
 
-/**
- * Ends the current quiz/flashcard session.
- * Displays a final message and returns to the dashboard.
- * @param {string} [reason='manual'] - The reason for finishing the quiz ('time_up', 'cards_exhausted', 'manual').
- */
 function finishQuiz(reason = 'manual') {
     stopQuizTimer(); // Stop the countdown timer
     let finalMessage = `Session completed!`;
