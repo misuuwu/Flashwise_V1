@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashWise - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div id="messageBox" class="hidden modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" id="messageBoxModalCloseX">&times;</button>
+            <h2 id="messageBoxTitle"></h2>
+            <p id="messageBoxContent"></p>
+            <div id="messageBoxInputContainer" class="mb-4 text-left hidden">
+                <label for="messageBoxInput" class="block text-sm font-bold mb-2" id="messageBoxInputLabel"></label>
+                <input type="text" id="messageBoxInput" placeholder="">
+            </div>
+            <div class="modal-actions">
+                <button id="messageBoxOkBtn" class="btn-primary">OK</button>
+                <button id="messageBoxConfirmYesBtn" class="btn-primary hidden">Yes</button>
+                <button id="messageBoxConfirmNoBtn" class="btn-primary hidden" style="background-color: var(--button-hover-bg); border-color: var(--border-color);">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-page" class="page-container">
+        <div class="header-section">
+            <div class="header-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 18L10 23L11 16H6L14 1V6H18L13 18Z" fill="#FCD34D" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M4 19V5C4 4.44772 4.44772 4 5 4H10C10.5523 4 11 4.44772 11 5V19C11 19.5523 10.5523 20 10 20H5C4.44772 20 4 19.5523 4 19Z" fill="white" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M4.5 19H10.5" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M6 7H9" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M6 10H9" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M6 13H9" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="welcome-text">Welcome to</div>
+            <div class="flashwise-text">FlashWise</div>
+        </div>
+
+        <div class="form-card">
+            <h2 class="text-2xl font-bold mb-6">Log In:</h2>
+            <form id="login-form">
+
+                <div class="mb-4">
+                    <label for="loginemail" class="block text-sm font-bold mb-2">Email:</label>
+                    <input type="text" id="loginemail" placeholder="Enter your email:">
+                </div>
+                <div class="mb-6">
+                    <label for="loginpassword" class="block text-sm font-bold mb-2">Password:</label>
+                    <input type="password" id="loginpassword" placeholder="Enter your password:">
+                </div>
+                <div class="flex items-center justify-between mb-6">
+                    <span class="text-sm text-gray-600">Don't have an account? <a href="signup.html" class="link-text">Click Here</a></span>
+                    <input type="submit" class="btn-primary" id="loginsubmit" value="Log In"></input>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+    <script src="utils.js"></script>
+</body>
+</html>
