@@ -50,13 +50,13 @@ const quizChoiceButtons = document.getElementById('quiz-choice-buttons');
 const quizFeedbackDisplay = document.getElementById('quiz-feedback');
 
 // Global quiz state variables
-let currentQuizSet = []; // Cards for the current quiz session
+let currentQuizSet = []; 
 let currentCardIndex = 0;
 let quizTimerInterval;
-let quizTimeRemaining; // in seconds
-let quizMode = 'flashcards'; // Can be 'flashcards' or 'quiz'
-let correctAnswersCount = 0; // Tracks correct answers in quiz mode
-let totalQuestionsAnswered = 0; // Tracks total questions attempted in quiz mode
+let quizTimeRemaining;
+let quizMode = 'flashcards'; 
+let correctAnswersCount = 0; 
+let totalQuestionsAnswered = 0; 
 
 // Modal elements
 const createDeckModal = document.getElementById('createDeckModal');
@@ -78,8 +78,8 @@ const shareDeckLinkInput = document.getElementById('share-deck-link');
 const copyShareLinkBtn = document.getElementById('copy-share-link-btn');
 
 // State for which deck/card is currently being edited/viewed (Firestore IDs)
-let currentManagingDeckId = null; // Stores the Firestore ID of the deck being managed
-let currentEditingCardIndex = null; // Stores the array index of the card being edited within the deck's cards array
+let currentManagingDeckId = null; 
+let currentEditingCardIndex = null; 
 
 // Stores the current user's Firestore data (displayName, tupId)
 let currentUserFirestoreData = null;
@@ -152,16 +152,16 @@ function initDashboardListeners() {
             }
             document.getElementById('createDeckModalTitle').textContent = 'Create New Deck';
             newDeckNameInput.value = '';
-            newDeckTimerInput.value = '60'; // Default timer value
+            newDeckTimerInput.value = '60'; 
             createDeckModal.classList.remove('hidden');
-            currentManagingDeckId = null; // Clear ID, as we are creating a new deck
+            currentManagingDeckId = null; 
         });
     }
 
    
     if (createDeckForm) {
         createDeckForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault(); 
             const deckName = newDeckNameInput.value.trim();
             const defaultTimer = parseInt(newDeckTimerInput.value, 10);
             const createDeckModalContent = createDeckModal.querySelector('.modal-content');
@@ -199,12 +199,12 @@ function initDashboardListeners() {
                         defaultTimer: defaultTimer,
                         ownerId: currentUser.uid,
                         ownerDisplayName: currentUserFirestoreData?.displayName || currentUser.email,
-                        cards: [] // Initialize with an empty array of cards
+                        cards: [] 
                     });
                     showMessageBox('New Deck Created', `Deck "${deckName}" created successfully.`);
                 }
                 createDeckModal.classList.add('hidden'); // Hide the modal
-                renderFlashcardSets(); // Update the dashboard display
+                renderFlashcardSets(); 
             } catch (error) {
                 console.error("Error saving deck:", error);
                 showMessageBox('Error', 'Failed to save deck: ' + error.message);
@@ -240,7 +240,7 @@ function initDashboardListeners() {
                 return;
             }
 
-            quizMode = document.querySelector('input[name="quiz-mode"]:checked')?.value || 'flashcards'; // Get selected mode
+            quizMode = document.querySelector('input[name="quiz-mode"]:checked')?.value || 'flashcards'; 
             let sessionTimer = 0;
 
             if (quizMode === 'quiz') {
@@ -303,14 +303,14 @@ function initDashboardListeners() {
                 cardImagePreview.innerHTML = '';
                 cardImagePreview.appendChild(img);
             } else if (cardImagePreview) {
-                cardImagePreview.innerHTML = '<span class="placeholder-icon">📷</span>'; // Show default icon if URL is empty
+                cardImagePreview.innerHTML = '<span class="placeholder-icon">📷</span>'; 
             }
         });
     }
 
     if (createCardForm) {
         createCardForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault(); 
             const question = cardQuestionInput.value.trim();
             const answer = cardAnswerInput.value.trim();
             const imageUrl = cardImageURLInput.value.trim();
@@ -343,7 +343,7 @@ function initDashboardListeners() {
                 }
 
                 const currentCards = deckDoc.data().cards || [];
-                const newCard = { question, answer, imageUrl: imageUrl || undefined }; // Use undefined if no image URL
+                const newCard = { question, answer, imageUrl: imageUrl || undefined }; 
 
                 let updatedCards = [...currentCards]; // Create a mutable copy
 

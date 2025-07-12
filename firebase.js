@@ -40,6 +40,13 @@ if (signupForm) {
         const username = usernameInput.value;
         const password = signupPasswordInput.value;
 
+        // Basic validation before attempting Firebase operation
+        if (!email || !password || !username || !tupId) {
+            showMessageBox('Error', 'All fields are required for signup.');
+            triggerShakeAnimation(signupForm); // Shake the signup form
+            return;
+        }
+
         // Create user with email and password
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -54,13 +61,17 @@ if (signupForm) {
             })
             .then(() => {
                 console.log("User signed up and data saved to Firestore successfully!");
-                alert("Sign up successful! Please log in.");
-                window.location.href = "login.html"; // Redirect to login after successful signup
+                // Replaced alert with showMessageBox
+                showMessageBox('Sign Up Successful', 'You have successfully signed up! Please log in.', () => {
+                    window.location.href = "login.html"; // Redirect to login after successful signup
+                });
             })
             .catch((error) => {
                 const errorMessage = error.message;
                 console.error("Signup Error:", error);
-                alert("Signup Error: " + errorMessage);
+                // Replaced alert with showMessageBox and added shake
+                showMessageBox('Signup Error', 'Failed to sign up: ' + errorMessage);
+                triggerShakeAnimation(signupForm); // Shake the signup form on error
             });
     });
 }
@@ -73,17 +84,27 @@ if (loginForm) {
         const loginemail = loginEmailInput.value;
         const loginpassword = loginPasswordInput.value;
 
+        // Basic validation before attempting Firebase operation
+        if (!loginemail || !loginpassword) {
+            showMessageBox('Error', 'Email and password are required for login.');
+            triggerShakeAnimation(loginForm); // Shake the login form
+            return;
+        }
+
         signInWithEmailAndPassword(auth, loginemail, loginpassword)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
                 console.log("User logged in:", user);
+                // No explicit success message here, as it directly redirects
                 window.location.href = "index.html"; 
             })
             .catch((error) => {
                 const errorMessage = error.message;
                 console.error("Login Error:", error);
-                alert("Login Error: " + errorMessage);
+                // Replaced alert with showMessageBox and added shake
+                showMessageBox('Login Error', 'Failed to log in: ' + errorMessage);
+                triggerShakeAnimation(loginForm); // Shake the login form on error
             });
     });
 }
