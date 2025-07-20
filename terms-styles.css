@@ -3,31 +3,31 @@
 
 /* Define CSS Variables for consistent styling */
 :root {
-    --primary-bg: #f5f5f5; /* Light background for light mode */
-    --secondary-bg: #ffffff; /* Card/modal background for light mode */
-    --text-color: #333333; /* Dark text for light mode */
-    --accent-color: #FCD34D; /* Yellow/gold from SVG icon */
-    --button-bg: #1a1a1a; /* Dark button background */
-    --button-text: #ffffff; /* White button text */
-    --button-hover-bg: #333333; /* Darker button hover */
-    --border-color: #e0e0e0; /* Light border */
-    --shadow-color: #000000; /* Black shadow */
-    --modal-overlay-bg: rgba(0, 0, 0, 0.6); /* Semi-transparent black overlay */
-    --success-color: #22c55e; /* Green for success */
-    --error-color: #ef4444; /* Red for error */
-    --warning-color: #f59e0b; /* Orange for warnings */
+    --primary-bg: #f5f5f5; 
+    --secondary-bg: #ffffff; 
+    --text-color: #333333; 
+    --accent-color: #FCD34D; 
+    --button-bg: #1a1a1a; 
+    --button-text: #ffffff; 
+    --button-hover-bg: #333333; 
+    --border-color: #e0e0e0; 
+    --shadow-color: #000000; 
+    --modal-overlay-bg: rgba(0, 0, 0, 0.6); 
+    --success-color: #22c55e; 
+    --error-color: #ef4444; 
+    --warning-color: #f59e0b; 
 }
 
 /* Dark Mode Variables (for terms page, if it has a toggle) */
 body.dark-mode {
-    --primary-bg: #1a1a1a; /* Dark background for dark mode */
-    --secondary-bg: #2d2d2d; /* Card/modal background for dark mode */
-    --text-color: #e0e0e0; /* Light text for dark mode */
-    --button-bg: #FCD34D; /* Accent color for buttons in dark mode */
-    --button-text: #1a1a1a; /* Dark text for accent buttons */
-    --button-hover-bg: #d9b13d; /* Slightly darker accent on hover */
-    --border-color: #4a4a4a; /* Darker border */
-    --shadow-color: #000000; /* Still black shadow for contrast */
+    --primary-bg: #1a1a1a; 
+    --secondary-bg: #2d2d2d; 
+    --text-color: #e0e0e0; 
+    --button-bg: #FCD34D; 
+    --button-text: #1a1a1a; 
+    --button-hover-bg: #d9b13d; 
+    --border-color: #4a4a4a;
+    --shadow-color: #000000; 
 }
 
 /* General Body Styles */
@@ -54,7 +54,7 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 700px; /* Widened specifically for terms.html */
+    max-width: 700px; 
     padding: 1rem;
     box-sizing: border-box;
 }
@@ -69,12 +69,12 @@ body {
     width: 80px;
     height: 80px;
     margin: 0 auto 1rem;
-    background-color: var(--button-bg); /* Dark background for the icon circle */
+    background-color: var(--button-bg); 
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 4px 4px 0px 0px var(--shadow-color); /* Offset shadow */
+    box-shadow: 4px 4px 0px 0px var(--shadow-color); 
     transition: background-color 0.3s ease;
 }
 
@@ -102,16 +102,16 @@ body {
 .form-card {
     background-color: var(--secondary-bg);
     padding: 2.5rem;
-    border-radius: 1rem; /* More rounded corners */
-    box-shadow: 8px 8px 0px 0px var(--shadow-color); /* Larger offset shadow */
+    border-radius: 1rem;
+    box-shadow: 8px 8px 0px 0px var(--shadow-color); 
     width: 100%;
-    max-width: 700px; /* Widened specifically for terms.html */
+    max-width: 700px;
     box-sizing: border-box;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     /* Specific styles for terms content area */
-    max-height: 70vh; /* Limits height to 70% of viewport height */
-    overflow-y: auto; /* Adds scrollbar if content overflows */
-    -webkit-overflow-scrolling: touch; /* Improves scrolling on iOS */
+    max-height: 70vh; 
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch; 
 }
 
 /* Input Fields (included for completeness, though not directly used on terms.html) */
@@ -124,8 +124,8 @@ textarea {
     padding: 0.75rem 1rem;
     margin-top: 0.5rem;
     border: 1px solid var(--border-color);
-    border-radius: 0.5rem; /* Rounded input fields */
-    background-color: var(--primary-bg); /* Match body background */
+    border-radius: 0.5rem; 
+    background-color: var(--primary-bg); 
     color: var(--text-color);
     box-sizing: border-box;
     transition: border-color 0.3s ease, background-color 0.3s ease;
@@ -137,7 +137,7 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--accent-color); /* Highlight on focus */
+    border-color: var(--accent-color); 
 }
 
 /* Buttons */
@@ -145,23 +145,23 @@ textarea:focus {
     background-color: var(--button-bg);
     color: var(--button-text);
     padding: 0.75rem 1.5rem;
-    border: 2px solid var(--shadow-color); /* Button border matches shadow */
-    border-radius: 0.5rem; /* Rounded buttons */
+    border: 2px solid var(--shadow-color); 
+    border-radius: 0.5rem;
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-    box-shadow: 4px 4px 0px 0px var(--shadow-color); /* Offset shadow for buttons */
+    box-shadow: 4px 4px 0px 0px var(--shadow-color); 
 }
 
 .btn-primary:hover {
     background-color: var(--button-hover-bg);
-    transform: translate(2px, 2px); /* Simulate button press */
-    box-shadow: 2px 2px 0px 0px var(--shadow-color); /* Smaller shadow on press */
+    transform: translate(2px, 2px); 
+    box-shadow: 2px 2px 0px 0px var(--shadow-color); 
 }
 
 .btn-primary:active {
     transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px 0px var(--shadow-color); /* No shadow when fully pressed */
+    box-shadow: 0px 0px 0px 0px var(--shadow-color); 
 }
 
 /* Link Styling */
@@ -203,8 +203,8 @@ a:hover {
 .font-semibold { font-weight: 600; }
 .list-disc { list-style-type: disc; }
 .ml-6 { margin-left: 1.5rem; }
-.text-gray-500 { color: #6b7280; } /* Tailwind gray-500 */
-.yellow-text { color: var(--accent-color); } /* For shared decks panel header */
+.text-gray-500 { color: #6b7280; } 
+.yellow-text { color: var(--accent-color); } 
 
 /* Shake Animation (if used on terms.html) */
 @keyframes shake {

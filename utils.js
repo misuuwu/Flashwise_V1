@@ -85,10 +85,7 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
     }
 }
 
-/**
- * Triggers a shake animation on a given HTML element.
- * @param {HTMLElement} element - The element to apply the shake animation to.
- */
+
 function triggerShakeAnimation(element) {
     element.classList.add('shake');
     // Remove the shake class after the animation completes
@@ -97,11 +94,7 @@ function triggerShakeAnimation(element) {
     }, { once: true }); // Use { once: true } to automatically remove the listener after it fires
 }
 
-/**
- * Basic email format validation using a regular expression.
- * @param {string} email - The email string to validate.
- * @returns {boolean} True if the email format is valid, false otherwise.
- */
+
 function isValidEmail(email) {
     // A simple regex for email validation (can be more robust if needed)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

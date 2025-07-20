@@ -109,12 +109,10 @@
     <div id="dashboard-page" class="dashboard-wrapper">
         <div class="dashboard-header-top">
             <div class="user-info">
-                <div class="user-avatar">U#</div>
+                <a href ="profile.html"> <div class="user-avatar">U#</div></a>
                 <span id="user-display-name">username#001</span>
             </div>
             <div class="top-nav-menu">
-                <button>Accounts</button>
-                <!-- Night Mode Toggle Button -->
                 <button id="night-mode-toggle">Night Mode (Toggle)</button>
                 <button id="logout-button">Logout</button>
             </div>
@@ -131,6 +129,7 @@
                     <!-- User's decks will be dynamically loaded here -->
                 </div>
             </div>
+
 
             <!-- Shared Decks Panel (Placeholder) -->
             <div class="dashboard-panel flex-grow">
@@ -236,6 +235,6 @@
 
     <!-- Link to utility and app JavaScript files -->
     <script src="utils.js"></script>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="app.js" defer></script>
 </body>
 </html>

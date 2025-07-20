@@ -9,20 +9,20 @@
     --shadow-color: rgba(0, 0, 0, 1);
     --input-focus-border: #fcd34d;
     --button-hover-bg: #333;
-    --btn-text-color: white; /* Default for primary buttons */
+    --btn-text-color: white;
 }
 
 body.dark-mode {
-    --bg-color: #1a202c; /* Darker background */
-    --card-bg-color: #2d3748; /* Darker card background */
-    --text-color: #e2e8f0; /* Lighter text */
-    --accent-color: #fcd34d; /* Yellow accent stays */
-    --link-hover-color: #fbbf24; /* Yellow hover stays */
-    --border-color: #61dafb; /* Light blue border for contrast */
-    --shadow-color: rgba(97, 218, 251, 0.4); /* Lighter shadow with accent */
+    --bg-color: #1a202c; 
+    --card-bg-color: #2d3748; 
+    --text-color: #e2e8f0; 
+    --accent-color: #fcd34d; 
+    --link-hover-color: #fbbf24; 
+    --border-color: #61dafb;
+    --shadow-color: rgba(97, 218, 251, 0.4); 
     --input-focus-border: #61dafb;
-    --button-hover-bg: #4a5568; /* Darker hover for buttons */
-    --btn-text-color: black; /* Black text for primary buttons in dark mode (contrasts with light blue border) */
+    --button-hover-bg: #4a5568; 
+    --btn-text-color: black; 
 }
 
 body {
@@ -34,8 +34,8 @@ body {
     min-height: 100vh;
     margin: 0;
     overflow-x: hidden;
-    color: var(--text-color); /* Apply text color variable */
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
+    color: var(--text-color); 
+    transition: background-color 0.3s, color 0.3s; 
 }
 .page-container {
     width: 100%;
@@ -62,8 +62,8 @@ textarea {
     box-sizing: border-box;
     outline: none;
     transition: border-color 0.2s;
-    background-color: var(--card-bg-color); /* Input background matches card */
-    color: var(--text-color); /* Input text color */
+    background-color: var(--card-bg-color); 
+    color: var(--text-color); 
 }
 input[type="email"]:focus,
 input[type="password"]:focus,
@@ -80,8 +80,8 @@ button {
     transition: background-color 0.2s, transform 0.1s;
 }
 .btn-primary {
-    background-color: var(--border-color); /* Black/border color */
-    color: var(--btn-text-color); /* Use new variable for button text color */
+    background-color: var(--border-color); 
+    color: var(--btn-text-color); 
     border: 2px solid var(--border-color);
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
@@ -127,13 +127,13 @@ button {
     height: 50px;
 }
 .header-icon svg path[fill="#FCD34D"] {
-    fill: var(--accent-color); /* Ensure SVG fill also uses accent color */
+    fill: var(--accent-color); 
 }
 .header-icon svg path[fill="white"] {
-    fill: var(--card-bg-color); /* Ensure SVG fill also uses card background */
+    fill: var(--card-bg-color); 
 }
 .header-icon svg path[stroke="black"] {
-    stroke: var(--border-color); /* Ensure SVG stroke also uses border color */
+    stroke: var(--border-color); 
 }
 
 .welcome-text {
@@ -207,7 +207,7 @@ button {
     font-weight: 600;
 }
 .dashboard-header-top .top-nav-menu button:hover {
-    background-color: var(--bg-color); /* Hover background adapts */
+    background-color: var(--bg-color); 
 }
 
 
@@ -254,7 +254,7 @@ button {
     padding-right: 0.5rem;
 }
 .deck-item {
-    background-color: var(--bg-color); /* Lighter background for items */
+    background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
@@ -272,7 +272,7 @@ button {
     box-shadow: none;
 }
 .deck-item .deck-actions button:hover {
-    background-color: var(--bg-color); /* Hover background for icons */
+    background-color: var(--bg-color); 
 }
 
 /* Modal styling */
@@ -424,7 +424,7 @@ button {
     justify-content: center;
     padding: 2rem;
     box-sizing: border-box;
-    color: var(--text-color); /* Quiz card text color */
+    color: var(--text-color); 
 }
 .quiz-card .back {
     transform: rotateY(180deg);
@@ -628,7 +628,7 @@ button {
 .mode-timer-setting input {
     width: 100px;
     text-align: center;
-    background-color: var(--bg-color); /* Input background matches main background */
+    background-color: var(--bg-color); 
 }
 .mode-start-btn {
     margin-top: 1.5rem;
@@ -636,10 +636,10 @@ button {
 
 /* Quiz feedback colors */
 .feedback-correct {
-    color: #22c55e; /* Green */
+    color: #22c55e; 
 }
 .feedback-incorrect {
-    color: #ef4444; /* Red */
+    color: #ef4444; 
 }
 
 /* Styling for multiple choice buttons */
@@ -649,8 +649,8 @@ button {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
-    background-color: var(--border-color); /* Default choice button color */
-    color: var(--btn-text-color); /* Use new variable for button text color */
+    background-color: var(--border-color);
+    color: var(--btn-text-color); 
     border: 2px solid var(--border-color);
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
@@ -706,4 +706,66 @@ button {
         align-items: flex-start;
         gap: 0.5rem;
     }
+}
+
+.profile-container {
+    width: 600px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    padding: 24px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-icon {
+    background-color: #FFD700;
+    color: #000;
+    font-weight: bold;
+    font-size: 28px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.profile-info {
+    display: none;
+    flex-direction: column;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.profile-info p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.divider {
+    height: 1px;
+    background-color: #ccc;
+    margin: 20px 0;
+}
+
+.profile-tabs {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-tabs div {
+    width: 49%;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+    text-align: center;
 }
