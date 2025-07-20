@@ -1,13 +1,4 @@
-/**
- * Displays a custom message box as an alert, confirmation dialog, or input dialog.
- * @param {string} title - The title of the message box.
- * @param {string} message - The content message to display.
- * @param {Function} [onConfirmOrOkCallback=null] - Callback for OK/Yes. For input, this receives the input value.
- * @param {boolean} [isConfirm=false] - If true, displays 'Yes'/'No' buttons.
- * @param {string} [inputType=null] - If 'text' or 'number', displays an input field.
- * @param {string} [inputPlaceholder=''] - Placeholder for the input field.
- * @param {string} [inputLabel=''] - Label for the input field.
- */
+
 function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm = false, inputType = null, inputPlaceholder = '', inputLabel = '') {
     const messageBox = document.getElementById('messageBox');
     const messageBoxTitle = document.getElementById('messageBoxTitle');
