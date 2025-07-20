@@ -1,4 +1,3 @@
-
 // Firebase imports
 import { auth, db } from './firebase.js'; // Import auth and db from firebase.js
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
@@ -15,32 +14,32 @@ const logoutButton = document.getElementById('logout-button');
 const nightModeToggle = document.getElementById('night-mode-toggle');
 
 // Dashboard specific elements
-const userDisplayNameElement = document.getElementById('user-display-name'); // Corrected ID
+const userDisplayNameElement = document.getElementById('user-display-name');
 const userAvatarElement = document.querySelector('.user-avatar');
 const myDecksContainer = document.getElementById('my-decks-container');
 const sharedDecksContainer = document.getElementById('shared-decks-container');
 const createDeckBtn = document.getElementById('create-deck-btn');
 const importDeckBtn = document.getElementById('import-deck-btn');
 
-// Deck Management specific elements
+// Deck Management specific elements (Corrected IDs to match index.html)
 const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
-const currentDeckNameDisplay = document.getElementById('current-deck-name');
-const deckCardCountDisplay = document.getElementById('deck-card-count');
-const deckDefaultTimerDisplay = document.getElementById('deck-default-timer');
-const addNewCardBtn = document.getElementById('add-new-card-btn');
-const currentDeckCardsList = document.getElementById('current-deck-cards-list');
-const modeFlashcardsRadio = document.getElementById('mode-flashcards');
-const modeQuizRadio = document.getElementById('mode-quiz');
-const sessionQuizTimerInput = document.getElementById('session-quiz-timer');
-const startModeBtn = document.getElementById('start-mode-btn');
+const currentDeckNameDisplay = document.getElementById('current-deck-name'); // Corrected ID
+const deckCardCountDisplay = document.getElementById('deck-card-count'); // Added from index.html
+const deckDefaultTimerDisplay = document.getElementById('deck-default-timer'); // Added from index.html
+const addNewCardBtn = document.getElementById('add-new-card-btn'); // Corrected ID
+const currentDeckCardsList = document.getElementById('current-deck-cards-list'); // Corrected ID
+const modeFlashcardsRadio = document.getElementById('mode-flashcards'); // Added from index.html
+const modeQuizRadio = document.getElementById('mode-quiz'); // Added from index.html
+const sessionQuizTimerInput = document.getElementById('session-quiz-timer'); // Added from index.html
+const startModeBtn = document.getElementById('start-mode-btn'); // Added from index.html
 
-// Quiz specific elements
+// Quiz specific elements (already largely correct, but ensure consistency)
 const quizTimerDisplay = document.getElementById('quiz-timer');
-const quizScoreDisplay = document.getElementById('quiz-score');
-const quizCardWrapper = document.getElementById('quiz-card-wrapper');
-const quizCard = document.getElementById('quiz-card');
-const quizQuestion = document.getElementById('quiz-question');
-const quizAnswer = document.getElementById('quiz-answer');
+const quizScoreDisplay = document.getElementById('quiz-score'); // Added from index.html
+const quizCardWrapper = document.getElementById('quiz-card-wrapper'); // Added from index.html
+const quizCard = document.getElementById('quiz-card'); // Added from index.html
+const quizQuestion = document.getElementById('quiz-question'); // Added from index.html
+const quizAnswer = document.getElementById('quiz-answer'); // Added from index.html
 const quizImageFront = document.getElementById('quiz-image-front');
 const quizImageBack = document.getElementById('quiz-image-back');
 const prevCardBtn = document.getElementById('prev-card-btn');
@@ -49,16 +48,18 @@ const finishQuizBtn = document.getElementById('finish-quiz-btn');
 const quizChoiceButtons = document.getElementById('quiz-choice-buttons');
 const quizFeedbackDisplay = document.getElementById('quiz-feedback');
 
+
 // Global quiz state variables
-let currentQuizSet = []; 
+let currentQuizSet = [];
 let currentCardIndex = 0;
 let quizTimerInterval;
 let quizTimeRemaining;
-let quizMode = 'flashcards'; 
-let correctAnswersCount = 0; 
-let totalQuestionsAnswered = 0; 
+let quizMode = 'flashcards';
+let correctAnswersCount = 0;
+let totalQuestionsAnswered = 0;
+let currentQuizDeckName = null; // Stores the name of the deck for the current quiz/flashcard session
 
-// Modal elements
+// Modal elements (existing, ensure IDs match index.html)
 const createDeckModal = document.getElementById('createDeckModal');
 const createDeckForm = document.getElementById('create-deck-form');
 const newDeckNameInput = document.getElementById('new-deck-name');
@@ -77,9 +78,10 @@ const shareDeckModal = document.getElementById('shareDeckModal');
 const shareDeckLinkInput = document.getElementById('share-deck-link');
 const copyShareLinkBtn = document.getElementById('copy-share-link-btn');
 
+
 // State for which deck/card is currently being edited/viewed (Firestore IDs)
-let currentManagingDeckId = null; 
-let currentEditingCardIndex = null; 
+let currentManagingDeckId = null;
+let currentEditingCardIndex = null;
 
 // Stores the current user's Firestore data (displayName, tupId)
 let currentUserFirestoreData = null;
@@ -92,6 +94,86 @@ const randomWords = [
     "music", "dance", "sport", "game", "smile", "laugh", "cry", "sleep", "dream", "walk",
     "run", "jump", "sing", "talk", "listen", "read", "write", "think", "learn", "teach"
 ];
+
+
+// --- Utility Functions (Provided in original app.js, ensuring they are here) ---
+
+function showMessageBox(title, message, onOkCallback = null, showInput = false, inputType = 'text', inputPlaceholder = '', inputLabel = '', onConfirmCallback = null, onCancelCallback = null) {
+    const messageBox = document.getElementById('messageBox');
+    const messageBoxTitle = document.getElementById('messageBoxTitle');
+    const messageBoxContent = document.getElementById('messageBoxContent');
+    const messageBoxOkBtn = document.getElementById('messageBoxOkBtn');
+    const messageBoxInputContainer = document.getElementById('messageBoxInputContainer');
+    const messageBoxInputLabel = document.getElementById('messageBoxInputLabel');
+    const messageBoxInput = document.getElementById('messageBoxInput');
+    const messageBoxConfirmYesBtn = document.getElementById('messageBoxConfirmYesBtn');
+    const messageBoxConfirmNoBtn = document.getElementById('messageBoxConfirmNoBtn');
+    const messageBoxModalCloseX = document.getElementById('messageBoxModalCloseX');
+
+    if (!messageBox || !messageBoxTitle || !messageBoxContent || !messageBoxOkBtn || !messageBoxInputContainer || !messageBoxInputLabel || !messageBoxInput || !messageBoxConfirmYesBtn || !messageBoxConfirmNoBtn || !messageBoxModalCloseX) {
+        console.error('One or more message box elements not found. Falling back to alert.');
+        alert(`${title}: ${message}`); // Fallback to native alert
+        if (onOkCallback) onOkCallback();
+        return;
+    }
+
+    messageBoxTitle.textContent = title;
+    messageBoxContent.textContent = message;
+
+    messageBoxOkBtn.classList.add('hidden');
+    messageBoxConfirmYesBtn.classList.add('hidden');
+    messageBoxConfirmNoBtn.classList.add('hidden');
+
+    if (showInput) {
+        messageBoxInputContainer.classList.remove('hidden');
+        messageBoxInputLabel.textContent = inputLabel;
+        messageBoxInput.placeholder = inputPlaceholder;
+        messageBoxInput.type = inputType; // Set input type
+        messageBoxInput.value = '';
+    } else {
+        messageBoxInputContainer.classList.add('hidden');
+    }
+
+    if (onConfirmCallback && onCancelCallback) {
+        messageBoxConfirmYesBtn.classList.remove('hidden');
+        messageBoxConfirmNoBtn.classList.remove('hidden');
+
+        messageBoxConfirmYesBtn.onclick = () => {
+            messageBox.classList.add('hidden');
+            onConfirmCallback(showInput ? messageBoxInput.value : null);
+        };
+        messageBoxConfirmNoBtn.onclick = () => {
+            messageBox.classList.add('hidden');
+            onCancelCallback();
+        };
+        messageBoxModalCloseX.onclick = () => {
+            messageBox.classList.add('hidden');
+            onCancelCallback();
+        };
+    } else {
+        messageBoxOkBtn.classList.remove('hidden');
+        messageBoxOkBtn.onclick = () => {
+            messageBox.classList.add('hidden');
+            if (onOkCallback) onOkCallback();
+        };
+        messageBoxModalCloseX.onclick = () => {
+            messageBox.classList.add('hidden');
+            if (onOkCallback) onOkCallback();
+        };
+    }
+
+    messageBox.classList.remove('hidden');
+}
+
+
+function triggerShakeAnimation(element) {
+    if (element) {
+        element.classList.add('shake-animation');
+        element.addEventListener('animationend', () => {
+            element.classList.remove('shake-animation');
+        }, { once: true });
+    }
+}
 
 
 // --- Global Page Visibility & Routing (Crucial for Firebase Auth) ---
@@ -152,16 +234,16 @@ function initDashboardListeners() {
             }
             document.getElementById('createDeckModalTitle').textContent = 'Create New Deck';
             newDeckNameInput.value = '';
-            newDeckTimerInput.value = '60'; 
+            newDeckTimerInput.value = '60';
             createDeckModal.classList.remove('hidden');
-            currentManagingDeckId = null; 
+            currentManagingDeckId = null;
         });
     }
 
-   
+
     if (createDeckForm) {
         createDeckForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
             const deckName = newDeckNameInput.value.trim();
             const defaultTimer = parseInt(newDeckTimerInput.value, 10);
             const createDeckModalContent = createDeckModal.querySelector('.modal-content');
@@ -199,12 +281,15 @@ function initDashboardListeners() {
                         defaultTimer: defaultTimer,
                         ownerId: currentUser.uid,
                         ownerDisplayName: currentUserFirestoreData?.displayName || currentUser.email,
-                        cards: [] 
+                        cards: [],
+                        isShared: false, // Default to not shared
+                        shareId: null, // No share ID initially
+                        allowedUsers: [] // No allowed users initially
                     });
                     showMessageBox('New Deck Created', `Deck "${deckName}" created successfully.`);
                 }
                 createDeckModal.classList.add('hidden'); // Hide the modal
-                renderFlashcardSets(); 
+                renderFlashcardSets();
             } catch (error) {
                 console.error("Error saving deck:", error);
                 showMessageBox('Error', 'Failed to save deck: ' + error.message);
@@ -240,7 +325,7 @@ function initDashboardListeners() {
                 return;
             }
 
-            quizMode = document.querySelector('input[name="quiz-mode"]:checked')?.value || 'flashcards'; 
+            quizMode = document.querySelector('input[name="quiz-mode"]:checked')?.value || 'flashcards';
             let sessionTimer = 0;
 
             if (quizMode === 'quiz') {
@@ -266,7 +351,8 @@ function initDashboardListeners() {
                 // Create a copy of cards for the quiz session, adding 'answered' and 'correct' properties
                 const quizCardsForSession = deck.cards.map(card => ({ ...card, answered: false, correct: false }));
 
-                startQuiz(quizCardsForSession, sessionTimer, quizMode);
+                // Pass the deck name to startQuiz
+                startQuiz(quizCardsForSession, sessionTimer, quizMode, deck.name);
             } catch (error) {
                 console.error("Error starting quiz:", error);
                 showMessageBox('Error', 'Failed to start quiz: ' + error.message);
@@ -303,14 +389,14 @@ function initDashboardListeners() {
                 cardImagePreview.innerHTML = '';
                 cardImagePreview.appendChild(img);
             } else if (cardImagePreview) {
-                cardImagePreview.innerHTML = '<span class="placeholder-icon">📷</span>'; 
+                cardImagePreview.innerHTML = '<span class="placeholder-icon">📷</span>';
             }
         });
     }
 
     if (createCardForm) {
         createCardForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
             const question = cardQuestionInput.value.trim();
             const answer = cardAnswerInput.value.trim();
             const imageUrl = cardImageURLInput.value.trim();
@@ -343,7 +429,7 @@ function initDashboardListeners() {
                 }
 
                 const currentCards = deckDoc.data().cards || [];
-                const newCard = { question, answer, imageUrl: imageUrl || undefined }; 
+                const newCard = { question, answer, imageUrl: imageUrl || undefined };
 
                 let updatedCards = [...currentCards]; // Create a mutable copy
 
@@ -428,7 +514,7 @@ function initDashboardListeners() {
                         importDeck(shareId);
                     }
                 },
-                false, // Not a confirmation
+                true, // Not a confirmation
                 'text', // Input type
                 'Enter Share ID here', // Input placeholder
                 'Share ID:' // Input label
@@ -436,53 +522,48 @@ function initDashboardListeners() {
         });
     }
 
- 
+
     if (quizCard) {
         quizCard.addEventListener('click', () => {
             const card = currentQuizSet[currentCardIndex];
 
-            if (quizMode === 'quiz' && card.answered) {
-                // If already answered in quiz mode, just toggle flip, no new choices/feedback for action
-                quizCard.classList.toggle('flipped');
-                if (quizCard.classList.contains('flipped')) {
-                    // If flipped to answer side, show image/answer if any
-                    if (card.imageUrl && quizImageBack) {
-                        quizImageBack.src = card.imageUrl;
-                        quizImageBack.classList.remove('hidden');
-                        quizImageBack.onerror = () => { /* error handling */ };
-                    }
-                    if (quizAnswer) quizAnswer.textContent = card.answer;
-                    // Re-display feedback for already answered card
-                    if (quizFeedbackDisplay) {
-                        quizFeedbackDisplay.classList.remove('hidden');
-                        quizFeedbackDisplay.textContent = card.correct ? 'Correct!' : 'Incorrect!';
-                        quizFeedbackDisplay.classList.toggle('feedback-correct', card.correct);
-                        quizFeedbackDisplay.classList.toggle('feedback-incorrect', !card.correct);
-                    }
-                } else {
-                    // Flipped back to question side, hide answer image/feedback
-                    if (quizImageBack) quizImageBack.classList.add('hidden');
-                    if (quizFeedbackDisplay) quizFeedbackDisplay.classList.add('hidden');
-                }
-                return;
-            }
-
+            // Toggle the 'flipped' class to show/hide the answer
             quizCard.classList.toggle('flipped');
 
             if (quizCard.classList.contains('flipped')) {
                 // Card is now flipped to the answer side
-                if (card.imageUrl && quizImageBack) {
-                    quizImageBack.src = card.imageUrl;
-                    quizImageBack.classList.remove('hidden');
-                    quizImageBack.onerror = () => {
-                        quizImageBack.src = "https://placehold.co/150x100/CCCCCC/000000?text=Image+Error";
-                        img.alt = "Image Error";
-                    };
+                // Always display the image if available, regardless of mode
+                if (card.imageUrl) {
+                    // Use quizImageBack for the image on the flipped side
+                    if (quizImageBack) {
+                        quizImageBack.src = card.imageUrl;
+                        quizImageBack.classList.remove('hidden');
+                        quizImageBack.onerror = () => {
+                            quizImageBack.src = "https://placehold.co/150x100/CCCCCC/000000?text=Image+Error";
+                            quizImageBack.alt = "Image Error";
+                        };
+                    }
+                    // Hide quizImageFront if it was showing
+                    if (quizImageFront) quizImageFront.classList.add('hidden');
+                } else {
+                    // No image, ensure both image elements are hidden
+                    if (quizImageBack) quizImageBack.classList.add('hidden');
+                    if (quizImageFront) quizImageFront.classList.add('hidden');
                 }
-                if (quizAnswer) quizAnswer.textContent = card.answer;
+
+
+                if (quizMode === 'flashcards') { // Only show answer text in flashcard mode
+                    if (quizAnswer) {
+                        quizAnswer.textContent = card.answer;
+                        quizAnswer.classList.remove('hidden'); // Ensure answer text is visible
+                    }
+                } else { // In quiz mode, hide the answer text on flip
+                    if (quizAnswer) quizAnswer.classList.add('hidden');
+                }
+
 
                 if (quizMode === 'quiz' && quizChoiceButtons) {
-                    // Generate and display multiple choices
+                    // Only generate and display multiple choices if in quiz mode
                     quizChoiceButtons.classList.remove('hidden');
                     quizChoiceButtons.innerHTML = ''; // Clear previous buttons
 
@@ -491,15 +572,39 @@ function initDashboardListeners() {
                     choices.forEach(choiceText => {
                         const choiceBtn = document.createElement('button');
                         choiceBtn.textContent = choiceText;
-                        choiceBtn.classList.add('btn-primary', 'py-3', 'text-base'); // Apply button styles
+                        // Add classes for text wrapping and overflow handling
+                        choiceBtn.classList.add('btn-primary', 'py-3', 'text-base', 'text-wrap-fix'); 
                         choiceBtn.onclick = () => recordAnswer(choiceText === card.answer, choiceText);
                         quizChoiceButtons.appendChild(choiceBtn);
                     });
+                } else if (quizMode === 'flashcards') {
+                    // In flashcard mode, ensure choices and feedback are hidden
+                    if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden');
+                    if (quizFeedbackDisplay) quizFeedbackDisplay.classList.add('hidden');
                 }
             } else {
                 // Card is now flipped back to the question side
+                // Always display the image if available on the front
+                if (card.imageUrl) {
+                    if (quizImageFront) {
+                        quizImageFront.src = card.imageUrl;
+                        quizImageFront.classList.remove('hidden');
+                        quizImageFront.onerror = () => {
+                            quizImageFront.src = "https://placehold.co/150x100/CCCCCC/000000?text=Image+Error";
+                            quizImageFront.alt = "Image Error";
+                        };
+                    }
+                    // Hide quizImageBack if it was showing
+                    if (quizImageBack) quizImageBack.classList.add('hidden');
+                } else {
+                    // No image, ensure both image elements are hidden
+                    if (quizImageBack) quizImageBack.classList.add('hidden');
+                    if (quizImageFront) quizImageFront.classList.add('hidden');
+                }
+
                 if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden'); // Hide choice buttons
                 if (quizFeedbackDisplay) quizFeedbackDisplay.classList.add('hidden'); // Hide feedback
+                if (quizAnswer) quizAnswer.classList.add('hidden'); // Hide answer text
             }
         });
     }
@@ -535,6 +640,7 @@ function initDashboardListeners() {
         });
     }
 
+    console.log("Dashboard listeners initialized."); // Added for debugging
     hasInitializedDashboardListeners = true; // Set flag to true after initialization
 }
 
@@ -659,6 +765,7 @@ async function renderFlashcardSets() {
         myDecksContainer.innerHTML = ''; // Clear loading message
         querySnapshot.forEach((doc) => {
             const set = { id: doc.id, ...doc.data() }; // Add Firestore document ID to the set object
+            // Ensure 'cards' array exists for count, default to 0 if not
             const cardCount = set.cards ? set.cards.length : 0;
             const deckItemElement = document.createElement('div');
             deckItemElement.className = 'deck-item';
@@ -687,7 +794,7 @@ async function renderFlashcardSets() {
                 if (action !== 'delete-deck') { // No need to fetch if immediately deleting
                     const deckDoc = await getDoc(doc(db, "decks", deckId));
                     if (deckDoc.exists()) {
-                        targetDeck = { id: deckDoc.id, ...deckDoc.data() };
+                        targetDeck = { id: deckDoc.id, ...deckDoc.data() }; // Corrected line: changed 'doc.data()' to 'deckDoc.data()'
                     } else {
                         showMessageBox('Error', 'Deck not found. Please refresh.');
                         return;
@@ -711,7 +818,8 @@ async function renderFlashcardSets() {
                             return;
                         }
                         const quizCardsForSession = targetDeck.cards.map(card => ({ ...card, answered: false, correct: false }));
-                        startQuiz(quizCardsForSession, targetDeck.defaultTimer, 'quiz');
+                        // Pass the deck name to startQuiz
+                        startQuiz(quizCardsForSession, targetDeck.defaultTimer, 'quiz', targetDeck.name);
                         break;
                     case 'share-deck':
                         openShareDeckModal(deckId);
@@ -737,8 +845,17 @@ async function renderSharedFlashcardSets() {
     sharedDecksContainer.innerHTML = '<p class="py-4 text-center">Loading shared decks...</p>';
 
     try {
-        // Query the dedicated 'sharedDecks' collection
-        const q = query(collection(db, "sharedDecks"));
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            sharedDecksContainer.innerHTML = '<p class="py-4 text-center text-red-500">Please log in to view shared decks.</p>';
+            return;
+        }
+
+        // Query to show all decks marked as 'isShared: true'
+        const q = query(
+            collection(db, "decks"),
+            where("isShared", "==", true)
+        );
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
@@ -747,18 +864,45 @@ async function renderSharedFlashcardSets() {
         }
 
         sharedDecksContainer.innerHTML = ''; // Clear existing list
-        querySnapshot.forEach((doc) => {
-            const set = { id: doc.id, ...doc.data() }; // Add Firestore document ID
-            const deckItemElement = document.createElement('div');
-            deckItemElement.className = 'deck-item';
-            deckItemElement.innerHTML = `
-                <span>${set.name} (Shared by: ${set.ownerDisplayName || 'Unknown'})</span>
-                <div class="deck-actions">
-                    <button data-share-id="${set.shareId}" data-action="import-shared-deck" title="Import this Deck">📥</button>
-                </div>
-            `;
-            sharedDecksContainer.appendChild(deckItemElement);
-        });
+        const sharedDecksToShow = [];
+
+        for (const docSnapshot of querySnapshot.docs) {
+            const set = { id: docSnapshot.id, ...docSnapshot.data() };
+            const isOwner = set.ownerId === currentUser.uid;
+
+            // Check if the current user already has a personal copy of this deck
+            // This requires a separate query for each shared deck, which can be inefficient
+            // for many shared decks. For now, we'll do it to ensure accuracy.
+            const qPersonalCopy = query(
+                collection(db, "decks"),
+                where("ownerId", "==", currentUser.uid),
+                where("sourceShareId", "==", set.shareId)
+            );
+            const personalCopySnapshot = await getDocs(qPersonalCopy);
+            const alreadyImported = !personalCopySnapshot.empty;
+
+            // Only display if the user is NOT the owner and has NOT already imported it
+            if (!isOwner && !alreadyImported) {
+                sharedDecksToShow.push(set);
+            }
+        }
+
+        if (sharedDecksToShow.length === 0) {
+            sharedDecksContainer.innerHTML = '<p class="py-4 text-center">No new decks have been shared with you.</p>';
+        } else {
+            sharedDecksToShow.forEach(set => {
+                const ownerDisplayName = set.ownerDisplayName || 'Unknown';
+                const deckItemElement = document.createElement('div');
+                deckItemElement.className = 'deck-item';
+                deckItemElement.innerHTML = `
+                    <span>${set.name} (Shared by: ${ownerDisplayName})</span>
+                    <div class="deck-actions">
+                        <button data-share-id="${set.shareId}" data-action="import-shared-deck" title="Import this Deck">📥</button>
+                    </div>
+                `;
+                sharedDecksContainer.appendChild(deckItemElement);
+            });
+        }
 
         sharedDecksContainer.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', (e) => {
@@ -872,7 +1016,7 @@ function renderCardsInDeckManagement(deckId, cards) {
         // Display a truncated question and optionally a camera emoji if an image is present
         let cardContentSummary = `Card ${cardIndex + 1}: ${card.question?.substring(0, 50)}${card.question?.length > 50 ? '...' : ''}`;
         if (card.imageUrl) {
-            cardContentSummary += ' 📸';
+            cardContentSummary += ' �';
         }
         cardItemElement.innerHTML = `
             <span>${cardContentSummary}</span>
@@ -977,7 +1121,9 @@ async function openShareDeckModal(deckId) {
         return;
     }
     try {
-        const deckDoc = await getDoc(doc(db, "decks", deckId));
+        const deckRef = doc(db, "decks", deckId);
+        const deckDoc = await getDoc(deckRef);
+
         if (!deckDoc.exists() || deckDoc.data().ownerId !== auth.currentUser.uid) {
             showMessageBox('Error', 'Deck not found or you do not have permission to share it.');
             return;
@@ -991,15 +1137,14 @@ async function openShareDeckModal(deckId) {
             await updateDoc(doc(db, "decks", deckId), { shareId: deckToShare.shareId });
         }
 
+        // Update the deck to be marked as shared and include the owner in allowedUsers
+        // This ensures the owner can always see it in their shared decks list if they import it later.
+        await updateDoc(deckRef, {
+            isShared: true,
+            shareId: deckToShare.shareId,
+            allowedUsers: [...new Set([...(deckToShare.allowedUsers || []), auth.currentUser.uid])] // Ensure owner is in allowedUsers
+        });
 
-        await setDoc(doc(db, "sharedDecks", deckToShare.shareId), {
-            name: deckToShare.name,
-            defaultTimer: deckToShare.defaultTimer,
-            cards: deckToShare.cards,
-            ownerId: deckToShare.ownerId,
-            ownerDisplayName: deckToShare.ownerDisplayName,
-            shareId: deckToShare.shareId // Store shareId within the document for easy lookup
-        }, { merge: true }); // Use merge to update if exists, create if not
 
         const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`; // Adjusted link for index.html
         if (shareDeckLinkInput) shareDeckLinkInput.value = shareLink;
@@ -1012,6 +1157,10 @@ async function openShareDeckModal(deckId) {
     }
 }
 
+// Simple unique ID generator (for shareId)
+function generateUniqueId() {
+    return 'FW-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+}
 
 
 async function importDeck(shareId) {
@@ -1019,37 +1168,72 @@ async function importDeck(shareId) {
         showMessageBox('Error', 'You must be logged in to import decks.');
         return;
     }
+    const currentUserUid = auth.currentUser.uid;
+
     try {
-        const sharedDeckDoc = await getDoc(doc(db, "sharedDecks", shareId));
+        // 1. Find the original shared deck
+        const qShared = query(collection(db, "decks"), where("shareId", "==", shareId));
+        const querySnapshotShared = await getDocs(qShared);
 
-        if (sharedDeckDoc.exists()) {
-            const deckToImport = sharedDeckDoc.data();
-
-            // Check if a deck with the same name already exists in personal decks to avoid duplicates
-            const q = query(collection(db, "decks"),
-                            where("ownerId", "==", auth.currentUser.uid),
-                            where("name", "==", deckToImport.name));
-            const existingDecksSnapshot = await getDocs(q);
-
-            if (!existingDecksSnapshot.empty) {
-                showMessageBox('Already Exists', `A deck named "${deckToImport.name}" already exists in your collection.`);
-                return;
-            }
-
-            // Create a new document in the user's personal 'decks' collection
-            await addDoc(collection(db, "decks"), {
-                name: deckToImport.name,
-                defaultTimer: deckToImport.defaultTimer,
-                cards: deckToImport.cards,
-                ownerId: auth.currentUser.uid, // Assign to current user
-                ownerDisplayName: currentUserFirestoreData?.displayName || auth.currentUser.email,
-                // Do NOT copy the original shareId to the imported deck, it's a new copy
-            });
-            showMessageBox('Deck Imported', `Deck "${deckToImport.name}" imported successfully!`);
-            renderFlashcardSets(); // Re-render user's decks
-        } else {
+        if (querySnapshotShared.empty) {
             showMessageBox('Not Found', 'No shared deck found with that ID.');
+            return;
         }
+
+        const originalSharedDeckDoc = querySnapshotShared.docs[0];
+        const deckToImport = originalSharedDeckDoc.data();
+        const originalDeckId = originalSharedDeckDoc.id;
+
+        // Check if the deck is actually marked as shared
+        if (!deckToImport.isShared) {
+            showMessageBox('Error', 'This deck is not marked as shareable.');
+            return;
+        }
+
+        // 2. Check if the user already has a personal copy of this deck
+        const qPersonalCopy = query(
+            collection(db, "decks"),
+            where("ownerId", "==", currentUserUid),
+            where("sourceShareId", "==", shareId)
+        );
+        const personalCopySnapshot = await getDocs(qPersonalCopy);
+
+        if (!personalCopySnapshot.empty) {
+            showMessageBox('Info', 'You have already imported a copy of this deck. It is in your "My Decks" list.');
+            return;
+        }
+
+        // 3. Create a new personal copy of the deck
+        const newDeckData = {
+            name: `${deckToImport.name} (Imported)`, // Add a suffix to distinguish
+            defaultTimer: deckToImport.defaultTimer,
+            ownerId: currentUserUid,
+            ownerDisplayName: currentUserFirestoreData?.displayName || auth.currentUser.email,
+            cards: deckToImport.cards || [], // Copy cards
+            isShared: false, // Personal copy is not shared by default
+            shareId: null, // Personal copy does not have the original shareId
+            sourceShareId: shareId, // Keep a reference to the original shared ID
+            allowedUsers: [], // New personal copy starts with no allowed users
+            createdAt: new Date() // Add creation timestamp
+        };
+
+        await addDoc(collection(db, "decks"), newDeckData);
+
+        // 4. (Optional but good practice): Add the user to the original shared deck's allowedUsers
+        // This tracks who has imported it, even if they have a personal copy.
+        const originalDeckRef = doc(db, "decks", originalDeckId);
+        const currentAllowedUsers = originalSharedDeckDoc.data().allowedUsers || [];
+        if (!currentAllowedUsers.includes(currentUserUid)) {
+            await updateDoc(originalDeckRef, {
+                allowedUsers: [...currentAllowedUsers, currentUserUid]
+            });
+        }
+
+
+        showMessageBox('Deck Imported', `Deck "${newDeckData.name}" imported successfully! It is now in your "My Decks" list.`);
+        await renderFlashcardSets(); // Re-render "My Decks" to show the newly added one
+        await renderSharedFlashcardSets(); // Re-render "Shared Decks" to reflect it's no longer "new" to the user
+
     } catch (error) {
         console.error("Error importing deck:", error);
         showMessageBox('Error', 'Failed to import deck: ' + error.message);
@@ -1093,7 +1277,7 @@ function generateChoices(correctAnswer, allCards, numDistractors = 3) {
             choices.push(combinedDistractors[i]);
         }
     }
-    
+
 
     while (choices.length < (numDistractors + 1) && choices.length < (allCards.length + genericDistractors.length)) {
         const randomWord = genericDistractors[Math.floor(Math.random() * genericDistractors.length)];
@@ -1110,8 +1294,14 @@ function generateChoices(correctAnswer, allCards, numDistractors = 3) {
 }
 
 
-
-function startQuiz(cards, timerSeconds, mode) {
+/**
+ * Starts a new quiz or flashcard session.
+ * @param {Array<Object>} cards - The array of card objects for the session.
+ * @param {number} timerSeconds - The duration of the quiz in seconds (0 for flashcards).
+ * @param {string} mode - 'quiz' or 'flashcards'.
+ * @param {string} deckName - The name of the deck being used.
+ */
+function startQuiz(cards, timerSeconds, mode, deckName) {
     if (cards.length === 0) {
         showMessageBox('No Cards', 'This flashcard set has no cards to quiz on!');
         return;
@@ -1120,6 +1310,7 @@ function startQuiz(cards, timerSeconds, mode) {
     currentCardIndex = 0;
     quizTimeRemaining = timerSeconds;
     quizMode = mode; // Set the global quiz mode
+    currentQuizDeckName = deckName; // Store the deck name for later use in session history
 
     correctAnswersCount = 0; // Reset score for new session
     totalQuestionsAnswered = 0; // Reset total questions for new session
@@ -1137,6 +1328,11 @@ function startQuiz(cards, timerSeconds, mode) {
 
     renderQuizCard(); // Render the first card
     showAppPage(quizPage); // Navigate to the quiz page
+
+    // Update the "Finish Quiz" button text based on the mode
+    if (finishQuizBtn) {
+        finishQuizBtn.textContent = (quizMode === 'flashcards') ? 'Finish' : 'Finish Quiz';
+    }
 }
 
 /**
@@ -1166,6 +1362,7 @@ function renderQuizCard() {
     const card = currentQuizSet[currentCardIndex];
 
     // Reset UI elements for the new card
+    // Ensure both front and back images are hidden initially
     if (quizImageFront) {
         quizImageFront.classList.add('hidden');
         quizImageFront.src = '';
@@ -1174,25 +1371,33 @@ function renderQuizCard() {
         quizImageBack.classList.add('hidden');
         quizImageBack.src = '';
     }
+
     if (quizFeedbackDisplay) {
         quizFeedbackDisplay.classList.add('hidden');
         quizFeedbackDisplay.textContent = '';
     }
     if (quizCard) quizCard.classList.remove('flipped'); // Ensure card starts face down
     if (quizChoiceButtons) quizChoiceButtons.innerHTML = ''; // Clear previous choices
+    if (quizAnswer) quizAnswer.classList.add('hidden'); // Ensure answer is hidden initially
 
-    // Display question content
+
+    // Display question content and image on the front of the card
     if (card.imageUrl && quizImageFront) {
         quizImageFront.src = card.imageUrl;
         quizImageFront.classList.remove('hidden');
         quizImageFront.onerror = () => {
             quizImageFront.src = "https://placehold.co/150x100/CCCCCC/000000?text=Image+Error";
-            img.alt = "Image Error";
+            quizImageFront.alt = "Image Error";
         };
     }
-    if (quizQuestion) quizQuestion.textContent = card.question;
+    if (quizQuestion) {
+        quizQuestion.textContent = card.question;
+        // Add classes for text wrapping and overflow handling
+        quizQuestion.classList.add('text-wrap-fix'); 
+    }
 
     // Initially hide choice buttons for quiz mode; they appear on flip
+    // In flashcard mode, they should always be hidden.
     if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden');
 
     updateQuizScoreDisplay(); // Update score
@@ -1200,9 +1405,9 @@ function renderQuizCard() {
 
 
 function recordAnswer(isCorrect, chosenAnswer) {
+    // Only record if in 'quiz' mode and the current card hasn't been answered yet
     if (quizMode !== 'quiz' || currentQuizSet[currentCardIndex].answered) {
-        // Only record if in 'quiz' mode and the current card hasn't been answered yet
-        return;
+        return; // Do nothing if not in quiz mode or already answered
     }
 
     const card = currentQuizSet[currentCardIndex];
@@ -1240,22 +1445,59 @@ function recordAnswer(isCorrect, chosenAnswer) {
 }
 
 
-function finishQuiz(reason = 'manual') {
-    stopQuizTimer(); // Stop the countdown timer
-    let finalMessage = `Session completed!`;
+/**
+ * Ends the current quiz or flashcard session and saves history.
+ * @param {string} reason - The reason for finishing ('manual', 'time_up', 'cards_exhausted').
+ */
+async function finishQuiz(reason = 'manual') {
+    stopQuizTimer(); // Stop any running timer
+
+    let finalMessage = "Session Finished!";
 
     if (quizMode === 'quiz') {
+        // Logic for Quiz Mode
+        finalMessage = `Quiz completed!`;
         if (reason === 'time_up') {
-            finalMessage = `Time's up! Session completed.`;
-        } else if (reason === 'cards_exhausted') {
-            finalMessage = `All cards answered! Session completed.`;
-        } else { // 'manual' or other
+            finalMessage = `Time's up! Quiz finished.`;
+        } else if (reason === 'manual') {
             finalMessage = `Quiz finished manually!`;
+        } else if (reason === 'cards_exhausted') {
+            finalMessage = `All cards answered! Quiz finished.`;
         }
         finalMessage += ` You answered ${correctAnswersCount} out of ${totalQuestionsAnswered} correctly.`;
         finalMessage += ` Your final score is ${correctAnswersCount}/${totalQuestionsAnswered}.`;
-    } else { // Flashcard mode
-        finalMessage += ` Hope you learned something.`;
+
+        // Save quiz history
+        if (auth.currentUser && currentManagingDeckId && currentQuizDeckName) {
+            try {
+                await saveSessionHistory(
+                    auth.currentUser.uid,
+                    currentManagingDeckId,
+                    currentQuizDeckName, // Use the stored deck name
+                    'quiz', // Session Type: quiz
+                    correctAnswersCount, // Score
+                    totalQuestionsAnswered // Total Questions
+                );
+            } catch (error) {
+                console.error("Error saving quiz history:", error);
+            }
+        }
+    } else { // Flashcard Mode
+        finalMessage = `Flashcard session finished! Hope you learned something.`;
+
+        // Save flashcard history
+        if (auth.currentUser && currentManagingDeckId && currentQuizDeckName) {
+            try {
+                await saveSessionHistory(
+                    auth.currentUser.uid,
+                    currentManagingDeckId,
+                    currentQuizDeckName, // Use the stored deck name
+                    'flashcard'
+                );
+            } catch (error) {
+                console.error("Error saving flashcard history:", error);
+            }
+        }
     }
     showMessageBox('Session Finished', finalMessage, () => {
         showAppPage(dashboardPage); // Go back to dashboard after acknowledging message
@@ -1288,4 +1530,30 @@ function startQuizTimer() {
  */
 function stopQuizTimer() {
     clearInterval(quizTimerInterval);
+}
+
+/**
+ * Saves a record of a completed session (quiz or flashcard) to Firestore.
+ * @param {string} userId - The ID of the user who completed the session.
+ * @param {string} deckId - The ID of the deck used in the session.
+ * @param {string} deckName - The name of the deck used in the session.
+ * @param {string} sessionType - 'quiz' or 'flashcard'.
+ * @param {number|null} score - The user's score (for quizzes), null otherwise.
+ * @param {number|null} totalQuestions - The total number of questions (for quizzes), null otherwise.
+ */
+async function saveSessionHistory(userId, deckId, deckName, sessionType, score = null, totalQuestions = null) {
+    try {
+        await addDoc(collection(db, "sessionHistory"), {
+            userId: userId,
+            deckId: deckId,
+            deckName: deckName,
+            sessionType: sessionType,
+            timestamp: new Date(), // Store the exact completion time
+            score: score, // Only relevant for quiz
+            totalQuestions: totalQuestions // Only relevant for quiz
+        });
+        console.log("Session history saved successfully.");
+    } catch (error) {
+        console.error("Error saving session history:", error);
+    }
 }

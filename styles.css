@@ -707,3 +707,65 @@ button {
         gap: 0.5rem;
     }
 }
+
+.profile-container {
+    width: 600px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    padding: 24px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-icon {
+    background-color: #FFD700;
+    color: #000;
+    font-weight: bold;
+    font-size: 28px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.profile-info {
+    display: none;
+    flex-direction: column;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.profile-info p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.divider {
+    height: 1px;
+    background-color: #ccc;
+    margin: 20px 0;
+}
+
+.profile-tabs {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-tabs div {
+    width: 49%;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+    text-align: center;
+}
