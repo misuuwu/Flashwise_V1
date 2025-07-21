@@ -742,7 +742,7 @@ async function renderFlashcardSets() {
     }
 
     try {
-        // Query decks owned by the current user
+          // Query decks owned by the current user
         const q = query(collection(db, "decks"), where("ownerId", "==", currentUser.uid));
         const querySnapshot = await getDocs(q);
 
@@ -758,67 +758,71 @@ async function renderFlashcardSets() {
             const cardCount = set.cards ? set.cards.length : 0;
             const deckItemElement = document.createElement('div');
             deckItemElement.className = 'deck-item';
-            deckItemElement.innerHTML = `
-                <span>${set.name} (${cardCount} cards)</span>
-                <div class="deck-actions">
-                    <button data-deck-id="${set.id}" data-action="edit-deck" title="Edit Deck Name/Timer">✏️</button>
-                    <button data-deck-id="${set.id}" data-action="add-card" title="Add Card">+</button>
-                    <button data-deck-id="${set.id}" data-action="view-cards" title="View Cards">👁️</button>
-                    <button data-deck-id="${set.id}" data-action="start-quiz" title="Start Quiz">▶️</button>
-                    <button data-deck-id="${set.id}" data-action="share-deck" title="Share Deck">🔗</button>
-                    <button data-deck-id="${set.id}" data-action="delete-deck" title="Delete Deck">🗑️</button>
-                </div>
-            `;
+           deckItemElement.innerHTML = `
+            <span>${set.name} (${cardCount} cards)</span>
+            <div class="deck-actions">
+              <button data-deck-id="${set.id}" data-action="edit-deck" title="Edit Deck Name/Timer"><i class="fas fa-pen"></i></button>
+              <button data-deck-id="${set.id}" data-action="add-card" title="Add Card"><i class="fas fa-plus"></i></button>
+              <button data-deck-id="${set.id}" data-action="view-cards" title="View Cards"><i class="fas fa-eye"></i></button>
+              <button data-deck-id="${set.id}" data-action="start-quiz" title="Start Quiz"><i class="fas fa-play"></i></button>
+              <button data-deck-id="${set.id}" data-action="share-deck" title="Share Deck"><i class="fas fa-share"></i></button>
+              <button data-deck-id="${set.id}" data-action="delete-deck" title="Delete Deck"><i class="fas fa-trash"></i></button>
+          </div>
+        `;
+
             myDecksContainer.appendChild(deckItemElement);
         });
 
-        // Add event listeners to the action buttons using event delegation on the container
-        myDecksContainer.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', async (e) => {
-                const action = e.target.dataset.action;
-                const deckId = e.target.dataset.deckId; // Get the Firestore ID of the deck
+    myDecksContainer.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', async (e) => {
+        const clickedButton = e.target.closest('button');
+        if (!clickedButton) return;
 
-                // Fetch the current deck data for actions that need it
-                let targetDeck = null;
-                if (action !== 'delete-deck') { // No need to fetch if immediately deleting
-                    const deckDoc = await getDoc(doc(db, "decks", deckId));
-                    if (deckDoc.exists()) {
-                        targetDeck = { id: deckDoc.id, ...deckDoc.data() }; // Corrected line: changed 'doc.data()' to 'deckDoc.data()'
-                    } else {
-                        showMessageBox('Error', 'Deck not found. Please refresh.');
-                        return;
-                    }
-                }
+        const action = clickedButton.dataset.action;
+        const deckId = clickedButton.dataset.deckId;
 
-                switch (action) {
-                    case 'edit-deck':
-                        openEditDeckModal(deckId);
-                        break;
-                    case 'add-card':
-                        currentManagingDeckId = deckId; // Set the current deck for card creation
-                        openCreateCardModal();
-                        break;
-                    case 'view-cards':
-                        openDeckManagementPage(deckId); // Navigate to deck management page
-                        break;
-                    case 'start-quiz':
-                        if (!targetDeck.cards || targetDeck.cards.length === 0) {
-                            showMessageBox('No Cards', 'This deck has no cards to start a quiz.');
-                            return;
-                        }
-                        const quizCardsForSession = targetDeck.cards.map(card => ({ ...card, answered: false, correct: false }));
-                        // Pass the deck name to startQuiz
-                        startQuiz(quizCardsForSession, targetDeck.defaultTimer, 'quiz', targetDeck.name);
-                        break;
-                    case 'share-deck':
-                        openShareDeckModal(deckId);
-                        break;
-                    case 'delete-deck':
-                        deleteFlashcardDeck(deckId);
-                        break;
+        // Fetch the current deck data for actions that need it
+        let targetDeck = null;
+        if (action !== 'delete-deck') {
+            const deckDoc = await getDoc(doc(db, "decks", deckId));
+            if (deckDoc.exists()) {
+                targetDeck = { id: deckDoc.id, ...deckDoc.data() };
+            } else {
+                showMessageBox('Error', 'Deck not found. Please refresh.');
+                return;
+            }
+        }
+
+        switch (action) {
+            case 'edit-deck':
+                openEditDeckModal(deckId);
+                break;
+            case 'add-card':
+                currentManagingDeckId = deckId;
+                openCreateCardModal();
+                break;
+            case 'view-cards':
+                openDeckManagementPage(deckId);
+                break;
+            case 'start-quiz':
+                if (!targetDeck.cards || targetDeck.cards.length === 0) {
+                    showMessageBox('No Cards', 'This deck has no cards to start a quiz.');
+                    return;
                 }
-            });
-        });
+                const quizCardsForSession = targetDeck.cards.map(card => ({ ...card, answered: false, correct: false }));
+                startQuiz(quizCardsForSession, targetDeck.defaultTimer, 'quiz', targetDeck.name);
+                break;
+            case 'share-deck':
+                openShareDeckModal(deckId);
+                break;
+            case 'delete-deck':
+                deleteFlashcardDeck(deckId);
+                break;
+        }
+    });
+});
+
+
 
     } catch (error) {
         console.error("Error rendering flashcard sets:", error);
@@ -872,29 +876,35 @@ async function renderSharedFlashcardSets() {
             }
         }
 
-        if (sharedDecksToShow.length === 0) {
-            sharedDecksContainer.innerHTML = '<p class="py-4 text-center">No new decks have been shared with you.</p>';
-        } else {
-            sharedDecksToShow.forEach(set => {
-                const ownerDisplayName = set.ownerDisplayName || 'Unknown';
-                const deckItemElement = document.createElement('div');
-                deckItemElement.className = 'deck-item';
-                deckItemElement.innerHTML = `
-                    <span>${set.name} (Shared by: ${ownerDisplayName})</span>
-                    <div class="deck-actions">
-                        <button data-share-id="${set.shareId}" data-action="import-shared-deck" title="Import this Deck">📥</button>
-                    </div>
-                `;
-                sharedDecksContainer.appendChild(deckItemElement);
-            });
-        }
+           if (sharedDecksToShow.length === 0) {
+               sharedDecksContainer.innerHTML = '<p class="py-4 text-center">No new decks have been shared with you.</p>';
+           } else {
+               sharedDecksToShow.forEach(set => {
+                   const ownerDisplayName = set.ownerDisplayName || 'Unknown';
+                   const deckItemElement = document.createElement('div');
+                   deckItemElement.className = 'deck-item';
+                   deckItemElement.innerHTML = `
+                      <span>${set.name} (Shared by: ${ownerDisplayName})</span>
+                      <div class="deck-actions">
+                        <button data-share-id="${set.shareId}" data-action="import-shared-deck" title="Import this Deck">
+                          <i class="fas fa-download"></i>
+                       </button>
+                     </div>
+               `;
+                 sharedDecksContainer.appendChild(deckItemElement);
+    });
 
-        sharedDecksContainer.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const shareId = e.target.dataset.shareId;
-                importDeck(shareId);
-            });
+    // Event listeners to handle button clicks
+    sharedDecksContainer.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const clickedButton = e.target.closest('button');
+            if (!clickedButton) return;
+
+            const shareId = clickedButton.dataset.shareId;
+            importDeck(shareId);
         });
+    });
+}
 
     } catch (error) {
         console.error("Error rendering shared flashcard sets:", error);
@@ -1063,7 +1073,7 @@ function openCreateCardModal(cardData = null, deckId = null, cardIndex = null) {
         return;
     }
     createCardForm?.reset(); // Clear form fields
-    if (cardImagePreview) cardImagePreview.innerHTML = '<span class="placeholder-icon">📷</span>'; 
+    if (cardImagePreview) cardImagePreview.innerHTML = '<i class="fas fa-image placeholder-icon"></i>';
     if (createCardModalTitle) createCardModalTitle.textContent = 'Add New Card';
     if (deleteCardBtn) deleteCardBtn.style.display = 'none'; 
 
