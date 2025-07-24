@@ -769,3 +769,49 @@ button {
     border-bottom: 2px solid #333;
     text-align: center;
 }
+
+body.dark-mode #profile-page {
+  background-color: #1f2937; /* Tailwind dark gray */
+}
+
+/* Styles the main profile card for dark mode */
+body.dark-mode .profile-card {
+  background-color: #374151; /* Lighter dark gray */
+  border-color: #4b5563;
+}
+
+/* Styles the session history cards inside the profile page */
+body.dark-mode #profile-content-area .bg-white {
+  background-color: #4b5563; /* Same as other cards */
+  border-color: #6b7280;
+}
+
+/* Adjusts text colors for readability on dark backgrounds */
+body.dark-mode .text-gray-900,
+body.dark-mode .font-semibold {
+  color: #f9fafb; /* Off-white */
+}
+
+body.dark-mode .text-gray-500,
+body.dark-mode .text-gray-600,
+body.dark-mode .text-gray-700,
+body.dark-mode #profile-display-id,
+body.dark-mode #profile-display-bio {
+  color: #d1d5db; /* Light gray */
+}
+
+/* Styles the navigation tabs for dark mode */
+body.dark-mode .profile-tab.active-tab {
+  color: #f9fafb;
+  border-bottom-color: #f9fafb;
+}
+
+body.dark-mode .profile-tab {
+  color: #9ca3af;
+  border-bottom-color: #374151;
+}
+
+/* Styles the 'Edit Bio' button text */
+body.dark-mode #edit-bio-btn {
+    color: #60a5fa;
+}

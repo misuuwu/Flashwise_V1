@@ -4,6 +4,14 @@ import { doc, getDoc, collection, query, where, orderBy, getDocs, setDoc, update
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    // FIX: Apply saved theme preference on profile page load
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+
     const profilePage = document.getElementById('profile-page');
 
     if (!profilePage) return; // Exit if not on the profile page
@@ -19,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBioBtn = document.getElementById('cancel-bio-btn');
     const userAvatarLg = document.querySelector('.user-avatar-lg');
     const userInitials = document.getElementById('user-initials');
-
     // --- Tab Switching ---
     const tabQuizHistory = document.getElementById('tab-quiz-history');
     const tabDecks = document.getElementById('tab-decks');
