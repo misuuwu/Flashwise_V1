@@ -13,16 +13,16 @@
 }
 
 body.dark-mode {
-    --bg-color: #1a202c; 
-    --card-bg-color: #2d3748; 
-    --text-color: #e2e8f0; 
-    --accent-color: #fcd34d; 
-    --link-hover-color: #fbbf24; 
+    --bg-color: #1a202c;
+    --card-bg-color: #2d3748;
+    --text-color:  #d3ffff;
+    --accent-color: #fcd34d;
+    --link-hover-color: #fbbf24;
     --border-color: #61dafb;
-    --shadow-color: rgba(97, 218, 251, 0.4); 
+    --shadow-color: rgba(97, 218, 251, 0.4);
     --input-focus-border: #61dafb;
-    --button-hover-bg: #4a5568; 
-    --btn-text-color: black; 
+    --button-hover-bg: #4a5568;
+    --btn-text-color: black;
 }
 
 body {
@@ -34,8 +34,8 @@ body {
     min-height: 100vh;
     margin: 0;
     overflow-x: hidden;
-    color: var(--text-color); 
-    transition: background-color 0.3s, color 0.3s; 
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 .page-container {
     width: 100%;
@@ -62,8 +62,8 @@ textarea {
     box-sizing: border-box;
     outline: none;
     transition: border-color 0.2s;
-    background-color: var(--card-bg-color); 
-    color: var(--text-color); 
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
 }
 input[type="email"]:focus,
 input[type="password"]:focus,
@@ -80,8 +80,8 @@ button {
     transition: background-color 0.2s, transform 0.1s;
 }
 .btn-primary {
-    background-color: var(--border-color); 
-    color: var(--btn-text-color); 
+    background-color: var(--border-color);
+    color: var(--btn-text-color);
     border: 2px solid var(--border-color);
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
@@ -127,13 +127,13 @@ button {
     height: 50px;
 }
 .header-icon svg path[fill="#FCD34D"] {
-    fill: var(--accent-color); 
+    fill: var(--accent-color);
 }
 .header-icon svg path[fill="white"] {
-    fill: var(--card-bg-color); 
+    fill: var(--card-bg-color);
 }
 .header-icon svg path[stroke="black"] {
-    stroke: var(--border-color); 
+    stroke: var(--border-color);
 }
 
 .welcome-text {
@@ -207,7 +207,7 @@ button {
     font-weight: 600;
 }
 .dashboard-header-top .top-nav-menu button:hover {
-    background-color: var(--bg-color); 
+    background-color: var(--bg-color);
 }
 
 
@@ -272,7 +272,7 @@ button {
     box-shadow: none;
 }
 .deck-item .deck-actions button:hover {
-    background-color: var(--bg-color); 
+    background-color: var(--bg-color);
 }
 
 /* Modal styling */
@@ -403,7 +403,7 @@ button {
     text-align: center;
     min-height: 200px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Ensure content stacks vertically */
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -415,16 +415,17 @@ button {
 }
 .quiz-card .front, .quiz-card .back {
     backface-visibility: hidden;
-    position: absolute;
+    /* Remove position absolute to prevent overlapping */
+    /* position: absolute; */
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 0; /* Adjust padding as needed, inherited from .quiz-card */
     box-sizing: border-box;
-    color: var(--text-color); 
+    color: var(--text-color);
 }
 .quiz-card .back {
     transform: rotateY(180deg);
@@ -446,7 +447,7 @@ button {
     max-width: 100%;
     max-height: 120px;
     object-fit: contain;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.75rem; /* Add margin below image for spacing */
 }
 .quiz-navigation button {
     background-color: var(--border-color);
@@ -628,7 +629,7 @@ button {
 .mode-timer-setting input {
     width: 100px;
     text-align: center;
-    background-color: var(--bg-color); 
+    background-color: var(--bg-color);
 }
 .mode-start-btn {
     margin-top: 1.5rem;
@@ -636,10 +637,10 @@ button {
 
 /* Quiz feedback colors */
 .feedback-correct {
-    color: #22c55e; 
+    color: #22c55e;
 }
 .feedback-incorrect {
-    color: #ef4444; 
+    color: #ef4444;
 }
 
 /* Styling for multiple choice buttons */
@@ -650,7 +651,7 @@ button {
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
     background-color: var(--border-color);
-    color: var(--btn-text-color); 
+    color: var(--btn-text-color);
     border: 2px solid var(--border-color);
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
@@ -771,25 +772,25 @@ button {
 }
 
 body.dark-mode #profile-page {
-  background-color: #1f2937; /* Tailwind dark gray */
+  background-color: #1f2937; 
 }
 
-/* Styles the main profile card for dark mode */
+
 body.dark-mode .profile-card {
-  background-color: #374151; /* Lighter dark gray */
+  background-color: #374151; 
   border-color: #4b5563;
 }
 
-/* Styles the session history cards inside the profile page */
+
 body.dark-mode #profile-content-area .bg-white {
-  background-color: #4b5563; /* Same as other cards */
+  background-color: #4b5563; 
   border-color: #6b7280;
 }
 
-/* Adjusts text colors for readability on dark backgrounds */
+
 body.dark-mode .text-gray-900,
 body.dark-mode .font-semibold {
-  color: #f9fafb; /* Off-white */
+  color: #f9fafb; 
 }
 
 body.dark-mode .text-gray-500,
@@ -797,10 +798,10 @@ body.dark-mode .text-gray-600,
 body.dark-mode .text-gray-700,
 body.dark-mode #profile-display-id,
 body.dark-mode #profile-display-bio {
-  color: #d1d5db; /* Light gray */
+  color: #d1d5db; 
 }
 
-/* Styles the navigation tabs for dark mode */
+
 body.dark-mode .profile-tab.active-tab {
   color: #f9fafb;
   border-bottom-color: #f9fafb;
