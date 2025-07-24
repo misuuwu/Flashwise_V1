@@ -1,6 +1,6 @@
 // --- Logic specific to the Profile Page (profile.html) ---
 import { auth, db } from './firebase.js'; // Import auth and db
-import { doc, getDoc, collection, query, where, orderBy, getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { doc, getDoc, collection, query, where, orderBy, getDocs, setDoc, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabQuizHistory = document.getElementById('tab-quiz-history');
     const tabDecks = document.getElementById('tab-decks');
     const profileContentArea = document.getElementById('profile-content-area');
+    const clearHistoryButtonContainer = document.getElementById('clear-history-button-container'); // Get the new container
 
     let currentUserData = null; // Store current user's Firestore data
 
@@ -42,14 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userInitials) userInitials.textContent = userDoc.displayName ? userDoc.displayName.charAt(0).toUpperCase() : (userDoc.email ? userDoc.email.charAt(0).toUpperCase() : '?');
     }
 
- 
     async function renderSessionHistory(userId) {
         if (!profileContentArea) return;
         profileContentArea.innerHTML = '<p class="text-center text-gray-500">Loading session history...</p>';
+        if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button while loading
 
         try {
-            // Query the 'sessionHistory' collection for records belonging to the current user,
-            // ordered by timestamp from newest to oldest.
             const historyQuery = query(
                 collection(db, "sessionHistory"),
                 where("userId", "==", userId),
@@ -57,38 +56,81 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             const querySnapshot = await getDocs(historyQuery);
 
+            let historyHtml = '';
             if (querySnapshot.empty) {
-                profileContentArea.innerHTML = '<p class="text-center text-gray-500">No session history found.</p>';
-                return;
+                historyHtml = '<p class="text-center text-gray-500">No session history found.</p>';
+                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Ensure hidden if no history
+            } else {
+                // Use flex, flex-wrap, gap-4 for wrapping layout
+                // Explicitly define item width to allow 3 items per row (calc((100% - (2 * gap)) / 3))
+                historyHtml = '<div class="flex flex-wrap gap-4 justify-start">';
+                
+                querySnapshot.forEach((doc) => {
+                    const session = doc.data();
+                    const timestamp = session.timestamp ? new Date(session.timestamp.toDate()).toLocaleString() : 'N/A';
+                    const scoreDisplay = session.sessionType === 'quiz' && session.score !== null && session.totalQuestions !== null
+                        ? `<p class="text-gray-600 text-sm">Score: ${session.score}/${session.totalQuestions}</p>`
+                        : '';
+
+                    // Adjusted width to fit 3 items per row with a gap of 1rem (tailwind gap-4)
+                    historyHtml += `
+                        <div class="w-[calc((100%-32px)/3)] min-w-[18rem] rounded-lg border border-gray-200 bg-white p-4 shadow-md">
+                            <h3 class="truncate font-semibold text-lg">${session.deckName}</h3>
+                            <p class="text-sm text-gray-600">Type: ${session.sessionType === 'quiz' ? 'Quiz' : 'Flashcards'}</p>
+                            ${scoreDisplay}
+                            <p class="mt-2 text-xs text-gray-500">Completed: ${timestamp}</p>
+                        </div>
+                    `;
+                });
+                historyHtml += '</div>';
+                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.remove('hidden'); // Show button if history exists
             }
 
-            let historyHtml = '<div class="space-y-4">'; 
-            querySnapshot.forEach((doc) => {
-                const session = doc.data();
-                // Format the timestamp for display. toLocaleString() provides a human-readable date and time.
-                const timestamp = session.timestamp ? new Date(session.timestamp.toDate()).toLocaleString() : 'N/A';
-
-                // Conditionally display score for quiz sessions
-                const scoreDisplay = session.sessionType === 'quiz' && session.score !== null && session.totalQuestions !== null
-                    ? `<p class="text-gray-600 text-sm">Score: ${session.score}/${session.totalQuestions}</p>`
-                    : '';
-
-                // Construct HTML for each session item
-                historyHtml += `
-                    <div class="p-4 bg-white rounded-lg shadow-md border border-gray-200">
-                        <h3 class="font-semibold text-lg">${session.deckName}</h3>
-                        <p class="text-gray-600 text-sm">Type: ${session.sessionType === 'quiz' ? 'Quiz' : 'Flashcards'}</p>
-                        ${scoreDisplay}
-                        <p class="text-gray-500 text-xs mt-2">Completed: ${timestamp}</p>
-                    </div>
-                `;
-            });
-            historyHtml += '</div>';
             profileContentArea.innerHTML = historyHtml;
+
+            // Attach event listener to the clear history button (it's now outside profileContentArea)
+            const clearHistoryBtn = document.getElementById('clear-history-btn');
+            if (clearHistoryBtn) {
+                clearHistoryBtn.removeEventListener('click', clearSessionHistory); // Remove old listener to prevent duplicates
+                clearHistoryBtn.addEventListener('click', () => clearSessionHistory(userId));
+            }
 
         } catch (error) {
             console.error("Error loading session history:", error);
             profileContentArea.innerHTML = `<p class="text-red-500 text-center">Error loading session history: ${error.message}. Please check your browser's console for more details, and ensure you have the necessary Firestore indexes configured.</p>`;
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button on error
+        }
+    }
+
+    // Function to clear session history
+    async function clearSessionHistory(userId) {
+        if (!confirm("Are you sure you want to clear all your session history? This action cannot be undone.")) {
+            return;
+        }
+
+        try {
+            const historyQuery = query(
+                collection(db, "sessionHistory"),
+                where("userId", "==", userId)
+            );
+            const querySnapshot = await getDocs(historyQuery);
+
+            if (querySnapshot.empty) {
+                alert("No session history to clear.");
+                return;
+            }
+
+            const batch = writeBatch(db);
+            querySnapshot.forEach((doc) => {
+                batch.delete(doc.ref);
+            });
+            await batch.commit();
+
+            alert("Session history cleared successfully!");
+            renderSessionHistory(userId); // Re-render to show empty history
+        } catch (error) {
+            console.error("Error clearing session history:", error);
+            alert("Failed to clear session history: " + error.message);
         }
     }
 
@@ -97,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderUserDecks(userId) {
         if (!profileContentArea) return;
         profileContentArea.innerHTML = '<p class="text-center text-gray-500">Loading your decks...</p>';
+        if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button when not on history tab
 
         try {
             const q = query(collection(db, "decks"), where("ownerId", "==", userId));
@@ -107,14 +150,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            let decksHtml = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
+            // Use flex, flex-wrap, gap-4 for wrapping layout for decks too
+            let decksHtml = '<div class="flex flex-wrap gap-4 justify-start">';
             querySnapshot.forEach((doc) => {
                 const deck = doc.data();
                 // Check if 'isShared' exists and is true, otherwise default to 'Private'
                 const visibility = deck.isShared ? 'Shared' : 'Private';
+                // Adjusted width to fit 3 items per row with a gap of 1rem (tailwind gap-4)
                 decksHtml += `
-                    <div class="p-4 bg-white rounded-lg shadow-md border border-gray-200">
-                        <h3 class="font-semibold text-lg">${deck.name}</h3>
+                    <div class="w-[calc((100%-32px)/3)] min-w-[18rem] p-4 bg-white rounded-lg shadow-md border border-gray-200">
+                        <h3 class="font-semibold text-lg truncate">${deck.name}</h3>
                         <p class="text-gray-600 text-sm">Cards: ${deck.cards ? deck.cards.length : 0}</p>
                         <p class="text-gray-600 text-sm">Visibility: ${visibility}</p>
                         <p class="text-gray-500 text-xs mt-2">Created: ${deck.createdAt ? new Date(deck.createdAt.toDate()).toLocaleDateString() : 'N/A'}</p>
@@ -138,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tabDecks?.classList.remove('active-tab', 'border-black', 'text-black');
         tabDecks?.classList.add('text-gray-500', 'border-gray-200');
 
-
         // Apply active styling and render content for the selected tab
         if (activeTab === 'quiz-history') {
             tabQuizHistory?.classList.add('active-tab', 'border-black', 'text-black');
@@ -147,9 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (activeTab === 'decks') {
             tabDecks?.classList.add('active-tab', 'border-black', 'text-black');
             tabDecks?.classList.remove('text-gray-500', 'border-gray-200');
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button when decks tab is active
             await renderUserDecks(userId);
         } else {
             profileContentArea.innerHTML = '<p class="text-center text-gray-500">Select a tab to view content.</p>';
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button by default
         }
     }
 
