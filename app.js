@@ -464,7 +464,8 @@ function initDashboardListeners() {
                     }
                     const currentCards = deckDoc.data().cards || [];
                     deleteCardFromDeck(currentManagingDeckId, currentEditingCardIndex, currentCards);
-                    createCardModal.classList.add('hidden'); // Close modal after deletion
+                    // The createCardModal will be hidden by deleteCardFromDeck's confirm callback
+                    // No need to hide it immediately here
                 } catch (error) {
                     console.error("Error preparing to delete card:", error);
                     showMessageBox('Error', 'Failed to delete card: ' + error.message);
@@ -495,18 +496,25 @@ function initDashboardListeners() {
                 showMessageBox('Error', 'Please log in to import decks.');
                 return;
             }
+            // Correctly using onConfirmCallback to get the input value
             showMessageBox(
                 'Import Deck',
                 'Please enter the Share ID of the deck you want to import:',
-                (shareId) => { // Callback receives the input value
-                    if (shareId) {
-                        importDeck(shareId);
+                null, // onOkCallback is null as we're using Yes/No style confirmation for input
+                true, // showInput = true
+                'text', // inputType
+                'Enter Share ID here', // inputPlaceholder
+                'Share ID:', // inputLabel
+                (inputValue) => { // This is onConfirmCallback, which receives the input value
+                    if (inputValue) {
+                        importDeck(inputValue.trim()); // Pass the trimmed input value
+                    } else {
+                        showMessageBox('Error', 'Share ID cannot be empty.');
                     }
                 },
-                true, // Not a confirmation
-                'text', // Input type
-                'Enter Share ID here', // Input placeholder
-                'Share ID:' // Input label
+                () => { // onCancelCallback
+                    showMessageBox('Import Cancelled', 'Deck import cancelled.');
+                }
             );
         });
     }
@@ -562,7 +570,7 @@ function initDashboardListeners() {
                         const choiceBtn = document.createElement('button');
                         choiceBtn.textContent = choiceText;
                         // Add classes for text wrapping and overflow handling
-                        choiceBtn.classList.add('btn-primary', 'py-3', 'text-base', 'text-wrap-fix'); 
+                        choiceBtn.classList.add('btn-primary', 'py-3', 'text-base', 'text-wrap-fix');
                         choiceBtn.onclick = () => recordAnswer(choiceText === card.answer, choiceText);
                         quizChoiceButtons.appendChild(choiceBtn);
                     });
@@ -688,17 +696,30 @@ onAuthStateChanged(auth, async (user) => {
         const urlParams = new URLSearchParams(window.location.search);
         const shareDeckIdParam = urlParams.get('shareDeckId');
         if (shareDeckIdParam) {
+            // Using onConfirmCallback and onCancelCallback for Yes/No buttons
             showMessageBox(
                 'Import Shared Deck',
                 `Do you want to import the shared deck with ID: ${shareDeckIdParam}?`,
-                () => {
+                null, // No onOkCallback needed for Yes/No buttons
+                false, // No input field
+                'text', // inputType (default)
+                '', // inputPlaceholder (default)
+                '', // inputLabel (default)
+                () => { // onConfirmCallback (Yes)
                     importDeck(shareDeckIdParam);
                     // Clear the URL parameter after handling
                     const newUrl = new URL(window.location.href);
                     newUrl.searchParams.delete('shareDeckId');
                     window.history.replaceState({}, document.title, newUrl.toString());
                 },
-                true // This is a confirmation dialog
+                () => { // onCancelCallback (No)
+                    // User cancelled, do nothing or show a message
+                    showMessageBox('Import Cancelled', 'You chose not to import the deck.');
+                    // Clear the URL parameter even if cancelled
+                    const newUrl = new URL(window.location.href);
+                    newUrl.searchParams.delete('shareDeckId');
+                    window.history.replaceState({}, document.title, newUrl.toString());
+                }
             );
         }
 
@@ -914,16 +935,27 @@ async function renderSharedFlashcardSets() {
 
 
 function deleteFlashcardDeck(deckId) {
-    showMessageBox('Confirm Delete', 'Are you sure you want to delete this deck? This action cannot be undone.', async () => {
-        try {
-            await deleteDoc(doc(db, "decks", deckId));
-            showMessageBox('Deleted', 'Flashcard deck deleted successfully.');
-            renderFlashcardSets(); // Re-render the dashboard decks to update UI
-        } catch (error) {
-            console.error("Error deleting deck:", error);
-            showMessageBox('Error', 'Failed to delete deck: ' + error.message);
+    // Modified to use onConfirmCallback and onCancelCallback for Yes/No buttons
+    showMessageBox(
+        'Confirm Delete',
+        'Are you sure you want to delete this deck? This action cannot be undone.',
+        null, // No onOkCallback
+        false, // No input
+        'text', null, null, // Default input parameters
+        async () => { // onConfirmCallback (Yes)
+            try {
+                await deleteDoc(doc(db, "decks", deckId));
+                showMessageBox('Deleted', 'Flashcard deck deleted successfully.');
+                renderFlashcardSets(); // Re-render the dashboard decks to update UI
+            } catch (error) {
+                console.error("Error deleting deck:", error);
+                showMessageBox('Error', 'Failed to delete deck: ' + error.message);
+            }
+        },
+        () => { // onCancelCallback (No)
+            showMessageBox('Cancelled', 'Deck deletion cancelled.');
         }
-    }, true); // 'true' indicates this is a confirmation dialog
+    );
 }
 
 
@@ -960,7 +992,7 @@ async function openDeckManagementPage(deckId) {
         showMessageBox('Error', 'Please log in to manage decks.');
         return;
     }
-    currentManagingDeckId = deckId; 
+    currentManagingDeckId = deckId;
 
     try {
         const deckDoc = await getDoc(doc(db, "decks", deckId));
@@ -970,15 +1002,15 @@ async function openDeckManagementPage(deckId) {
             currentDeckNameDisplay.textContent = deck.name;
             deckCardCountDisplay.textContent = `${deck.cards ? deck.cards.length : 0} cards`;
             deckDefaultTimerDisplay.textContent = `${deck.defaultTimer}`;
-            sessionQuizTimerInput.value = deck.defaultTimer; 
+            sessionQuizTimerInput.value = deck.defaultTimer;
 
             // Set initial radio button state for quiz modes
-            if (modeFlashcardsRadio) modeFlashcardsRadio.checked = true; 
+            if (modeFlashcardsRadio) modeFlashcardsRadio.checked = true;
             const modeTimerSetting = document.getElementById('mode-timer-setting');
-            if (modeTimerSetting) modeTimerSetting.classList.add('hidden'); 
+            if (modeTimerSetting) modeTimerSetting.classList.add('hidden');
 
-            renderCardsInDeckManagement(deckId, deck.cards || []); 
-            showAppPage(deckManagementPage); 
+            renderCardsInDeckManagement(deckId, deck.cards || []);
+            showAppPage(deckManagementPage);
         } else {
             showMessageBox('Error', 'Deck not found or you do not have permission to view it. Returning to dashboard.');
             showAppPage(dashboardPage);
@@ -1007,13 +1039,13 @@ function renderCardsInDeckManagement(deckId, cards) {
         // Display a truncated question and optionally a camera emoji if an image is present
         let cardContentSummary = `Card ${cardIndex + 1}: ${card.question?.substring(0, 50)}${card.question?.length > 50 ? '...' : ''}`;
         if (card.imageUrl) {
-            cardContentSummary += ' �';
+            cardContentSummary += ' 📷';
         }
         cardItemElement.innerHTML = `
             <span>${cardContentSummary}</span>
             <div class="card-actions">
                 <button data-card-index="${cardIndex}" data-action="edit-card" title="Edit Card">✏️</button>
-                <button data-card-index="${cardIndex}" data-action="delete-card" title="Delete Card">🗑️️</button>
+                <button data-card-index="${cardIndex}" data-action="delete-card" title="Delete Card">🗑️</button>
             </div>
         `;
         currentDeckCardsList.appendChild(cardItemElement);
@@ -1042,27 +1074,9 @@ function renderCardsInDeckManagement(deckId, cards) {
         });
     });
 
-    if (deckCardCountDisplay) deckCardCountDisplay.textContent = `${cards.length} cards`; 
+    if (deckCardCountDisplay) deckCardCountDisplay.textContent = `${cards.length} cards`;
 }
 
-
-function deleteCardFromDeck(deckId, cardIndex, currentCardsArray) {
-    showMessageBox('Confirm Delete', 'Are you sure you want to delete this card? This action cannot be undone.', async () => {
-        try {
-            const updatedCards = [...currentCardsArray]; 
-            updatedCards.splice(cardIndex, 1); 
-
-            const deckRef = doc(db, "decks", deckId);
-            await updateDoc(deckRef, { cards: updatedCards }); 
-
-            showMessageBox('Card Deleted', 'Card deleted successfully.');
-            renderCardsInDeckManagement(deckId, updatedCards); 
-        } catch (error) {
-            console.error("Error deleting card:", error);
-            showMessageBox('Error', 'Failed to delete card: ' + error.message);
-        }
-    }, true);
-}
 
 
 // --- Create/Edit Card Modal Logic ---
@@ -1075,7 +1089,7 @@ function openCreateCardModal(cardData = null, deckId = null, cardIndex = null) {
     createCardForm?.reset(); // Clear form fields
     if (cardImagePreview) cardImagePreview.innerHTML = '<i class="fas fa-image placeholder-icon"></i>';
     if (createCardModalTitle) createCardModalTitle.textContent = 'Add New Card';
-    if (deleteCardBtn) deleteCardBtn.style.display = 'none'; 
+    if (deleteCardBtn) deleteCardBtn.style.display = 'none';
 
     // Set current editing context
     currentManagingDeckId = deckId;
@@ -1131,11 +1145,11 @@ async function openShareDeckModal(deckId) {
         await updateDoc(deckRef, {
             isShared: true,
             shareId: deckToShare.shareId,
-            allowedUsers: [...new Set([...(deckToShare.allowedUsers || []), auth.currentUser.uid])] 
+            allowedUsers: [...new Set([...(deckToShare.allowedUsers || []), auth.currentUser.uid])]
         });
 
 
-        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`; 
+        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`;
         if (shareDeckLinkInput) shareDeckLinkInput.value = shareLink;
         shareDeckModal?.classList.remove('hidden');
         renderSharedFlashcardSets(); // Update shared decks list on dashboard
@@ -1198,12 +1212,12 @@ async function importDeck(shareId) {
             defaultTimer: deckToImport.defaultTimer,
             ownerId: currentUserUid,
             ownerDisplayName: currentUserFirestoreData?.displayName || auth.currentUser.email,
-            cards: deckToImport.cards || [], 
-            isShared: false, 
-            shareId: null, 
-            sourceShareId: shareId, 
-            allowedUsers: [], 
-            createdAt: new Date() 
+            cards: deckToImport.cards || [],
+            isShared: false,
+            shareId: null,
+            sourceShareId: shareId,
+            allowedUsers: [],
+            createdAt: new Date()
         };
 
         await addDoc(collection(db, "decks"), newDeckData);
@@ -1219,8 +1233,8 @@ async function importDeck(shareId) {
 
 
         showMessageBox('Deck Imported', `Deck "${newDeckData.name}" imported successfully! It is now in your "My Decks" list.`);
-        await renderFlashcardSets(); 
-        await renderSharedFlashcardSets(); 
+        await renderFlashcardSets();
+        await renderSharedFlashcardSets();
 
     } catch (error) {
         console.error("Error importing deck:", error);
@@ -1287,28 +1301,28 @@ function startQuiz(cards, timerSeconds, mode, deckName) {
         showMessageBox('No Cards', 'This flashcard set has no cards to quiz on!');
         return;
     }
-    currentQuizSet = cards; 
+    currentQuizSet = cards;
     currentCardIndex = 0;
     quizTimeRemaining = timerSeconds;
-    quizMode = mode; 
-    currentQuizDeckName = deckName; 
+    quizMode = mode;
+    currentQuizDeckName = deckName;
 
-    correctAnswersCount = 0; 
-    totalQuestionsAnswered = 0; 
+    correctAnswersCount = 0;
+    totalQuestionsAnswered = 0;
 
     // Adjust visibility of timer and score based on quiz mode
     if (quizMode === 'quiz') {
         quizTimerDisplay?.classList.remove('hidden');
         quizScoreDisplay?.classList.remove('hidden');
-        startQuizTimer(); 
-    } else { 
+        startQuizTimer();
+    } else {
         quizTimerDisplay?.classList.add('hidden');
         quizScoreDisplay?.classList.add('hidden');
-        stopQuizTimer(); 
+        stopQuizTimer();
     }
 
-    renderQuizCard(); 
-    showAppPage(quizPage); 
+    renderQuizCard();
+    showAppPage(quizPage);
 
 
     if (finishQuizBtn) {
@@ -1353,9 +1367,9 @@ function renderQuizCard() {
         quizFeedbackDisplay.classList.add('hidden');
         quizFeedbackDisplay.textContent = '';
     }
-    if (quizCard) quizCard.classList.remove('flipped'); 
-    if (quizChoiceButtons) quizChoiceButtons.innerHTML = ''; 
-    if (quizAnswer) quizAnswer.classList.add('hidden'); 
+    if (quizCard) quizCard.classList.remove('flipped');
+    if (quizChoiceButtons) quizChoiceButtons.innerHTML = '';
+    if (quizAnswer) quizAnswer.classList.add('hidden');
 
 
     // Display question content and image on the front of the card
@@ -1369,8 +1383,8 @@ function renderQuizCard() {
     }
     if (quizQuestion) {
         quizQuestion.textContent = card.question;
-       
-        quizQuestion.classList.add('text-wrap-fix'); 
+
+        quizQuestion.classList.add('text-wrap-fix');
     }
 
     if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden');
@@ -1382,39 +1396,39 @@ function renderQuizCard() {
 function recordAnswer(isCorrect, chosenAnswer) {
     // Only record if in 'quiz' mode and the current card hasn't been answered yet
     if (quizMode !== 'quiz' || currentQuizSet[currentCardIndex].answered) {
-        return; 
+        return;
     }
 
     const card = currentQuizSet[currentCardIndex];
-    card.answered = true; 
-    card.correct = isCorrect; 
-    totalQuestionsAnswered++; 
+    card.answered = true;
+    card.correct = isCorrect;
+    totalQuestionsAnswered++;
 
     if (quizFeedbackDisplay) {
         if (isCorrect) {
             correctAnswersCount++; // Increment correct answers count
             quizFeedbackDisplay.textContent = 'Correct!';
-            quizFeedbackDisplay.classList.remove('feedback-incorrect'); 
+            quizFeedbackDisplay.classList.remove('feedback-incorrect');
             quizFeedbackDisplay.classList.add('feedback-correct');
         } else {
             quizFeedbackDisplay.textContent = `Incorrect! The correct answer was: ${card.answer}`;
-            quizFeedbackDisplay.classList.remove('feedback-correct'); 
+            quizFeedbackDisplay.classList.remove('feedback-correct');
             quizFeedbackDisplay.classList.add('feedback-incorrect');
         }
-        quizFeedbackDisplay.classList.remove('hidden'); 
+        quizFeedbackDisplay.classList.remove('hidden');
     }
-    if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden'); 
+    if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden');
 
-    updateQuizScoreDisplay(); 
+    updateQuizScoreDisplay();
 
     // Automatically proceed to the next card after a short delay for feedback display
     setTimeout(() => {
         if (currentCardIndex < currentQuizSet.length - 1) {
-            currentCardIndex++; 
-            renderQuizCard(); 
+            currentCardIndex++;
+            renderQuizCard();
         } else {
 
-            finishQuiz('cards_exhausted'); 
+            finishQuiz('cards_exhausted');
         }
     }, 2000);
 }
@@ -1443,10 +1457,10 @@ async function finishQuiz(reason = 'manual') {
                 await saveSessionHistory(
                     auth.currentUser.uid,
                     currentManagingDeckId,
-                    currentQuizDeckName, 
-                    'quiz', 
-                    correctAnswersCount, 
-                    totalQuestionsAnswered 
+                    currentQuizDeckName,
+                    'quiz',
+                    correctAnswersCount,
+                    totalQuestionsAnswered
                 );
             } catch (error) {
                 console.error("Error saving quiz history:", error);
@@ -1461,7 +1475,7 @@ async function finishQuiz(reason = 'manual') {
                 await saveSessionHistory(
                     auth.currentUser.uid,
                     currentManagingDeckId,
-                    currentQuizDeckName, 
+                    currentQuizDeckName,
                     'flashcard'
                 );
             } catch (error) {
@@ -1470,26 +1484,26 @@ async function finishQuiz(reason = 'manual') {
         }
     }
     showMessageBox('Session Finished', finalMessage, () => {
-        showAppPage(dashboardPage); 
+        showAppPage(dashboardPage);
     });
 }
 
 
 function startQuizTimer() {
-    clearInterval(quizTimerInterval); 
-    if (!quizTimerDisplay) return; 
+    clearInterval(quizTimerInterval);
+    if (!quizTimerDisplay) return;
 
     quizTimerInterval = setInterval(() => {
-        quizTimeRemaining--; 
+        quizTimeRemaining--;
         const minutes = Math.floor(quizTimeRemaining / 60);
         const seconds = quizTimeRemaining % 60;
         quizTimerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
         if (quizTimeRemaining <= 0) {
-            stopQuizTimer(); 
-            finishQuiz('time_up'); 
+            stopQuizTimer();
+            finishQuiz('time_up');
         }
-    }, 1000); 
+    }, 1000);
 }
 
 
@@ -1505,12 +1519,48 @@ async function saveSessionHistory(userId, deckId, deckName, sessionType, score =
             deckId: deckId,
             deckName: deckName,
             sessionType: sessionType,
-            timestamp: new Date(), 
-            score: score, 
-            totalQuestions: totalQuestions 
+            timestamp: new Date(),
+            score: score,
+            totalQuestions: totalQuestions
         });
         console.log("Session history saved successfully.");
     } catch (error) {
         console.error("Error saving session history:", error);
     }
+}
+
+
+function deleteCardFromDeck(deckId, cardIndex, currentCardsArray) {
+    // Using showMessageBox with onConfirmCallback and onCancelCallback for Yes/No buttons
+    showMessageBox(
+        'Confirm Delete',
+        'Are you sure you want to delete this card? This action cannot be undone.',
+        null, // onOkCallback is not used when onConfirmCallback/onCancelCallback are provided
+        false, // No input field
+        'text', null, null, // Default values for input related parameters
+        async () => { // onConfirmCallback (This is executed if 'Yes' is clicked)
+            try {
+                const updatedCards = [...currentCardsArray];
+                updatedCards.splice(cardIndex, 1);
+
+                const deckRef = doc(db, "decks", deckId);
+                await updateDoc(deckRef, { cards: updatedCards });
+
+                showMessageBox('Card Deleted', 'Card deleted successfully.');
+                renderCardsInDeckManagement(deckId, updatedCards);
+                // After successful deletion, hide the create card modal
+                createCardModal.classList.add('hidden');
+            } catch (error) {
+                console.error("Error deleting card:", error);
+                showMessageBox('Error', 'Failed to delete card: ' + error.message);
+            }
+        },
+        () => { // onCancelCallback (This is executed if 'No' is clicked or modal is closed)
+            showMessageBox('Cancelled', 'Card deletion cancelled.');
+            // If the user cancels, you might want to re-show the createCardModal
+            // if it was open for editing before attempting deletion.
+            // This depends on your desired UX. For now, we'll just let it remain hidden.
+            // createCardModal.classList.remove('hidden'); // Uncomment if you want to re-open
+        }
+    );
 }
