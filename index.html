@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashWise - Dashboard</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Link to your custom stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Icons for buttons --> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ 
+
+</head>
+<body>
+
+    <!-- Message Box Element (Custom alert/confirm modal) -->
+    <div id="messageBox" class="hidden modal-overlay">
+        <div class="modal-content">
+            <!-- Close button for the modal -->
+            <button class="close-btn" id="messageBoxModalCloseX">&times;</button>
+            <h2 id="messageBoxTitle"></h2>
+            <p id="messageBoxContent"></p>
+            <!-- New: Input field for Share ID in message box -->
+            <div id="messageBoxInputContainer" class="mb-4 text-left hidden">
+                <label for="messageBoxInput" class="block text-sm font-bold mb-2" id="messageBoxInputLabel"></label>
+                <input type="text" id="messageBoxInput" placeholder="">
+            </div>
+            <div class="modal-actions">
+                <!-- OK button for simple messages -->
+                <button id="messageBoxOkBtn" class="btn-primary">OK</button>
+                <!-- Yes button for confirmation messages -->
+                <button id="messageBoxConfirmYesBtn" class="btn-primary hidden">Yes</button>
+                <!-- No button for confirmation messages (styled differently) -->
+                <button id="messageBoxConfirmNoBtn" class="btn-primary hidden" style="background-color: var(--button-hover-bg); border-color: var(--border-color);">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Deck Modal -->
+    <div id="createDeckModal" class="hidden modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="createDeckModal.classList.add('hidden')">&times;</button>
+            <h2 id="createDeckModalTitle">Create New Deck</h2>
+            <form id="create-deck-form">
+                <div class="mb-4 text-left">
+                    <label for="new-deck-name" class="block text-sm font-bold mb-2">Deck Name:</label>
+                    <input type="text" id="new-deck-name" placeholder="Enter deck name">
+                </div>
+                <div class="mb-4 text-left">
+                    <label for="new-deck-timer" class="block text-sm font-bold mb-2">Default Quiz Timer (seconds):</label>
+                    <input type="number" id="new-deck-timer" value="60" min="10" step="5">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Create Deck</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create/Edit Card Modal -->
+    <div id="createCardModal" class="hidden modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="createCardModal.classList.add('hidden')">&times;</button>
+            <h2 id="createCardModalTitle">Add New Card</h2>
+            <form id="create-card-form">
+                <div class="mb-4 text-left">
+                    <label for="card-question" class="block text-sm font-bold mb-2">Question:</label>
+                    <textarea id="card-question" placeholder="Enter question" rows="3"></textarea>
+                </div>
+                <div class="mb-4 text-left">
+                    <label for="card-answer" class="block text-sm font-bold mb-2">Answer:</label>
+                    <textarea id="card-answer" placeholder="Enter answer" rows="3"></textarea>
+                </div>
+                <div class="mb-4 text-left">
+                    <label for="card-image-url" class="block text-sm font-bold mb-2">Image URL (Optional):</label>
+                    <input type="text" id="card-image-url" placeholder="Paste image URL here">
+                    <div class="card-image-preview mt-2" id="card-image-preview">
+                        <span class="placeholder-icon">📷</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Save Card</button>
+                    <!-- Delete button for cards (only visible when editing) -->
+                    <button type="button" id="delete-card-btn" class="btn-primary" style="background-color: #dc2626; border-color: #dc2626; display: none;">Delete Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Share Deck Modal -->
+    <div id="shareDeckModal" class="hidden modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="shareDeckModal.classList.add('hidden')">&times;</button>
+            <h2 id="shareDeckModalTitle">Share Deck</h2>
+            <p>Share this link for others to import your deck:</p>
+            <div class="mb-4 text-left">
+                <label for="share-deck-link" class="block text-sm font-bold mb-2">Shareable Link:</label>
+                <input type="text" id="share-deck-link" readonly>
+            </div>
+            <div class="modal-actions">
+                <button id="copy-share-link-btn" class="btn-primary">Copy Link</button>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Note: This is a simulated share. The link contains the deck ID.</p>
+        </div>
+    </div>
+
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="dashboard-wrapper">
+        <div class="dashboard-header-top">
+            <div class="user-info">
+                <a href ="profile.html"> <div class="user-avatar">U#</div></a>
+                <span id="user-display-name">username#001</span>
+            </div>
+            <div class="top-nav-menu">
+                <button id="night-mode-toggle">Night Mode (Toggle)</button>
+                <button id="logout-button">Logout</button>
+            </div>
+        </div>
+
+        <div class="dashboard-main-content">
+            <!-- Decks Panel -->
+            <div class="dashboard-panel flex-grow">
+                <div class="dashboard-panel-header">
+                    Decks
+                    <button id="create-deck-btn" class="btn-primary px-3 py-1 text-sm leading-none" style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">+ Create Deck</button>
+                </div>
+                <div id="my-decks-container" class="deck-list">
+                    <!-- User's decks will be dynamically loaded here -->
+                </div>
+            </div>
+
+
+            <!-- Shared Decks Panel (Placeholder) -->
+            <div class="dashboard-panel flex-grow">
+                <div class="dashboard-panel-header yellow-text">
+                    Shared Decks
+                    <button id="import-deck-btn" class="btn-primary px-3 py-1 text-sm leading-none" style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">Import Deck</button>
+                </div>
+                <div id="shared-decks-container" class="deck-list">
+                    <p class="py-4 text-center">No decks have been shared yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deck Management Page -->
+    <div id="deck-management-page" class="deck-management-wrapper hidden">
+        <div class="deck-management-header">
+            <button id="back-to-dashboard-btn" class="back-btn" title="Back to Dashboard">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h2 id="current-deck-name">Deck Name</h2>
+            <div style="width: 2rem;"></div> <!-- Spacer for alignment -->
+        </div>
+
+        <div class="deck-info mb-4">
+            <span id="deck-card-count">0 cards</span>
+            <span>Default Timer: <span id="deck-default-timer">0</span>s</span>
+        </div>
+
+        <div class="card-management-section flex-grow">
+            <div class="card-management-header">
+                Cards
+                <button id="add-new-card-btn" class="btn-primary px-3 py-1 text-sm leading-none" style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">+ Create Card</button>
+            </div>
+            <div id="current-deck-cards-list" class="card-list">
+                <p class="py-4 text-center">No cards in this deck yet. Add some!</p>
+            </div>
+        </div>
+
+        <div class="mode-selection-section">
+            <h3>Modes:</h3>
+            <div class="mode-options">
+                <div class="mode-option">
+                    <input type="radio" id="mode-flashcards" name="quiz-mode" value="flashcards" checked>
+                    <label for="mode-flashcards">Flashcards</label>
+                </div>
+                <div class="mode-option">
+                    <input type="radio" id="mode-quiz" name="quiz-mode" value="quiz">
+                    <label for="mode-quiz">Quiz</label>
+                </div>
+            </div>
+            <div class="mode-timer-setting" id="mode-timer-setting">
+                <span>Set Timer:</span>
+                <input type="number" id="session-quiz-timer" value="60" min="10" step="5">
+                <span>seconds</span>
+            </div>
+            <button id="start-mode-btn" class="btn-primary mode-start-btn">Start</button>
+        </div>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quiz-page" class="page-container hidden">
+        <div class="quiz-container">
+            <h2 class="text-2xl font-bold text-center mb-4">Quiz Time!</h2>
+            <div class="flex justify-between w-full mb-4">
+                <!-- Quiz Score Display -->
+                <div id="quiz-score" class="text-xl font-bold">Score: 0/0</div>
+                <!-- Quiz Timer Display -->
+                <div id="quiz-timer" class="quiz-timer">00:00</div>
+            </div>
+
+            <!-- Quiz Card Wrapper (for flip animation) -->
+            <div id="quiz-card-wrapper" class="quiz-card-wrapper mb-6">
+                <div id="quiz-card" class="quiz-card">
+                    <!-- Front of the flashcard (question) -->
+                    <div class="front">
+                        <img id="quiz-image-front" class="card-image hidden" alt="Question Image">
+                        <h2 id="quiz-question">Question will appear here.</h2>
+                    </div>
+                    <!-- Back of the flashcard (answer) -->
+                    <div class="back">
+                        <img id="quiz-image-back" class="card-image hidden" alt="Answer Image">
+                        <h2 id="quiz-answer">Answer will appear here.</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Feedback Message -->
+            <div id="quiz-feedback" class="text-lg font-bold mb-4 hidden"></div>
+
+            <!-- Multiple Choice Buttons (dynamically generated for quiz mode when flipped) -->
+            <div id="quiz-choice-buttons" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full hidden">
+                <!-- Choice buttons will be injected here by JavaScript -->
+            </div>
+
+            <!-- Navigation Buttons (Previous/Next Card) -->
+            <div class="quiz-navigation flex justify-between w-full mt-4">
+                <button id="prev-card-btn" class="btn-primary">Previous</button>
+                <button id="next-card-btn" class="btn-primary">Next</button>
+            </div>
+            <!-- Finish Quiz Button -->
+            <button id="finish-quiz-btn" class="btn-primary w-full max-w-xs mx-auto mt-4">Finish Quiz</button>
+        </div>
+    </div>
+
+    <!-- Link to utility and app JavaScript files -->
+    <script src="utils.js"></script>
+    <script type="module" src="app.js" defer></script>
+</body>
+</html>

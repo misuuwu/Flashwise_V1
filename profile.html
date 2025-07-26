@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashWise - Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+  <a href="index.html" class="profile-back-btn fixed top-4 left-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/75 text-black shadow-lg backdrop-blur-sm hover:bg-white">
+  <i class="fas fa-arrow-left text-xl"></i>
+</a>
+
+
+    <div id="profile-page" class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div class="profile-card w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+
+            <div class="flex items-center p-8 border-b border-gray-200">
+                <div class="user-avatar-lg flex-shrink-0 mr-6">
+                   <div class="w-24 h-24 rounded-full bg-yellow-400 flex items-center justify-center text-5xl font-bold text-black">
+                       <span id="user-initials"></span>
+                   </div>
+                </div>
+                <div class="flex-grow">
+                    <h2 id="profile-display-username" class="text-3xl font-bold text-gray-900 mb-1">Loading...<div class = "user-avatar"></div></h2>
+                   <div class = "user-display-name"> <p id="profile-display-id" class="text-md text-gray-600 mb-3">ID: Loading...</p></div>
+                    
+                    <div id="bio-display-container">
+                        <p id="profile-display-bio" class="text-gray-700 mb-2 whitespace-pre-wrap">No bio yet. Click to add one!</p>
+                        <button id="edit-bio-btn" class="text-blue-500 hover:underline text-sm">Edit Bio</button>
+                    </div>
+
+                    <div id="bio-edit-container" class="mt-2 hidden">
+                        <textarea id="profile-bio-input" class="w-full p-2 border rounded resize-none bg-gray-100 text-black" rows="3" placeholder="Write your bio here..."></textarea>
+                        <div class="flex justify-end mt-2 space-x-2">
+                            <button id="save-bio-btn" class="btn-primary">Save</button>
+                            <button id="cancel-bio-btn" class="btn-primary cancel-bio-button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex border-b border-gray-200">
+                <button id="tab-quiz-history" class="profile-tab active-tab w-1/2 py-4 text-center text-lg font-semibold text-black border-b-2 border-black focus:outline-none">
+                    Session History
+                </button>
+                <button id="tab-decks" class="profile-tab w-1/2 py-4 text-center text-lg font-semibold text-gray-500 focus:outline-none">
+                    Decks
+                </button>
+            </div>
+
+            <div id="profile-content-wrapper" class="p-8">
+                <div id="profile-content-area" class="min-h-[300px] text-gray-700">
+                    <p class="text-center text-gray-500">Select a tab to view content.</p>
+                </div>
+                <div id="clear-history-button-container" class="mt-6 text-center hidden">
+                    <button id="clear-history-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                        Clear History
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="profile.js"></script>
+    <script src="utils.js"></script>
+</body>
+</html>
