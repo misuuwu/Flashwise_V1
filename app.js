@@ -871,13 +871,13 @@ async function openShareDeckModal(deckId) {
             cards: deckToShare.cards,
             ownerId: deckToShare.ownerId,
             ownerDisplayName: deckToShare.ownerDisplayName,
-            shareId: deckToShare.shareId // Store shareId within the document for easy lookup
-        }, { merge: true }); // Use merge to update if exists, create if not
+            shareId: deckToShare.shareId 
+        }, { merge: true }); 
 
-        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`; // Adjusted link for index.html
+        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`; 
         if (shareDeckLinkInput) shareDeckLinkInput.value = shareLink;
         shareDeckModal?.classList.remove('hidden');
-        renderSharedFlashcardSets(); // Update shared decks list on dashboard
+        renderSharedFlashcardSets(); 
         showMessageBox('Deck Shared!', 'Your deck is now shareable. Copy the link!');
 
     } catch (error) {
@@ -1335,9 +1335,9 @@ function updateQuizScoreDisplay() {
 
 function recordAnswer(isCorrect, chosenAnswer = '') {
     const currentCard = currentQuizSet[currentCardIndex];
-    if (currentCard.answered) return; // Prevent multiple answers for the same card
+    if (currentCard.answered) return; 
 
-    currentCard.answered = true; // Mark card as answered
+    currentCard.answered = true; 
     totalQuestionsAnswered++;
 
     if (isCorrect) {
@@ -1361,9 +1361,9 @@ function recordAnswer(isCorrect, chosenAnswer = '') {
         Array.from(quizChoiceButtons.children).forEach(button => {
             button.disabled = true;
             if (button.textContent === currentCard.answer) {
-                button.classList.add('correct-answer-btn'); // Highlight correct answer
+                button.classList.add('correct-answer-btn');
             } else if (button.textContent === chosenAnswer && !isCorrect) {
-                button.classList.add('incorrect-answer-btn'); // Highlight chosen incorrect answer
+                button.classList.add('incorrect-answer-btn');
             }
         });
     }

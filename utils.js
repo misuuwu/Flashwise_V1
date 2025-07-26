@@ -13,14 +13,14 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
 
     messageBoxTitle.textContent = title;
     messageBoxContent.textContent = message;
-    messageBox.classList.remove('hidden'); // Show the modal overlay
+    messageBox.classList.remove('hidden'); 
 
     // Hide all action buttons and input container first
     messageBoxOkBtn.classList.add('hidden');
     messageBoxConfirmYesBtn.classList.add('hidden');
     messageBoxConfirmNoBtn.classList.add('hidden');
     messageBoxInputContainer.classList.add('hidden');
-    messageBoxInput.value = ''; // Clear previous input value
+    messageBoxInput.value = ''; 
 
     // Remove previous event listeners to prevent multiple triggers
     messageBoxOkBtn.onclick = null;
@@ -58,12 +58,12 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
         messageBoxConfirmYesBtn.onclick = () => {
             messageBox.classList.add('hidden'); // Hide the modal
             if (onConfirmOrOkCallback) {
-                onConfirmOrOkCallback(); // Execute callback if provided
+                onConfirmOrOkCallback(); 
             }
         };
         // Attach event listener for 'No' button
         messageBoxConfirmNoBtn.onclick = () => {
-            messageBox.classList.add('hidden'); // Hide the modal
+            messageBox.classList.add('hidden'); 
         };
         // X button acts like 'No' in a confirm dialog
         messageBoxModalCloseX.onclick = () => {
@@ -73,9 +73,9 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
         // Show only 'OK' button for simple alerts
         messageBoxOkBtn.classList.remove('hidden');
         messageBoxOkBtn.onclick = () => {
-            messageBox.classList.add('hidden'); // Hide the modal
+            messageBox.classList.add('hidden'); 
             if (onConfirmOrOkCallback) {
-                onConfirmOrOkCallback(); // Execute callback if provided
+                onConfirmOrOkCallback(); 
             }
         };
         // X button acts like 'OK' in a simple alert

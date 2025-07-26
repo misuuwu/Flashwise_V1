@@ -61,10 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 historyHtml = '<p class="text-center text-gray-500">No session history found.</p>';
                 if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Ensure hidden if no history
             } else {
-                // Use flex, flex-wrap, gap-4 for wrapping layout
-                // Explicitly define item width to allow 3 items per row (calc((100% - (2 * gap)) / 3))
+               
                 historyHtml = '<div class="flex flex-wrap gap-4 justify-start">';
-                
+
                 querySnapshot.forEach((doc) => {
                     const session = doc.data();
                     const timestamp = session.timestamp ? new Date(session.timestamp.toDate()).toLocaleString() : 'N/A';
@@ -91,14 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Attach event listener to the clear history button (it's now outside profileContentArea)
             const clearHistoryBtn = document.getElementById('clear-history-btn');
             if (clearHistoryBtn) {
-                clearHistoryBtn.removeEventListener('click', clearSessionHistory); // Remove old listener to prevent duplicates
+                clearHistoryBtn.removeEventListener('click', clearSessionHistory); 
                 clearHistoryBtn.addEventListener('click', () => clearSessionHistory(userId));
             }
 
         } catch (error) {
             console.error("Error loading session history:", error);
             profileContentArea.innerHTML = `<p class="text-red-500 text-center">Error loading session history: ${error.message}. Please check your browser's console for more details, and ensure you have the necessary Firestore indexes configured.</p>`;
-            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button on error
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); 
         }
     }
 
@@ -191,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (activeTab === 'decks') {
             tabDecks?.classList.add('active-tab', 'border-black', 'text-black');
             tabDecks?.classList.remove('text-gray-500', 'border-gray-200');
-            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button when decks tab is active
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); 
             await renderUserDecks(userId);
         } else {
             profileContentArea.innerHTML = '<p class="text-center text-gray-500">Select a tab to view content.</p>';

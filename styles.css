@@ -15,7 +15,7 @@
 body.dark-mode {
     --bg-color: #1a202c;
     --card-bg-color: #2d3748;
-    --text-color:  #d3ffff;
+    --text-color: #d3ffff;
     --accent-color: #fcd34d;
     --link-hover-color: #fbbf24;
     --border-color: #61dafb;
@@ -37,12 +37,14 @@ body {
     color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
 }
+
 .page-container {
     width: 100%;
     max-width: 480px;
     padding: 1rem;
     box-sizing: border-box;
 }
+
 .form-card {
     background-color: var(--card-bg-color);
     padding: 2.5rem 2rem;
@@ -50,6 +52,7 @@ body {
     box-shadow: 8px 8px 0px 0px var(--shadow-color);
     border: 2px solid var(--border-color);
 }
+
 input[type="email"],
 input[type="password"],
 input[type="text"],
@@ -65,6 +68,7 @@ textarea {
     background-color: var(--card-bg-color);
     color: var(--text-color);
 }
+
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="text"]:focus,
@@ -72,6 +76,7 @@ input[type="number"]:focus,
 textarea:focus {
     border-color: var(--input-focus-border);
 }
+
 button {
     padding: 0.75rem 1.5rem;
     border-radius: 0.75rem;
@@ -79,37 +84,45 @@ button {
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
 }
+
 .btn-primary {
     background-color: var(--border-color);
     color: var(--btn-text-color);
     border: 2px solid var(--border-color);
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
+
 .btn-primary:hover {
     background-color: var(--button-hover-bg);
     transform: translateY(-2px);
 }
+
 .btn-primary:active {
     transform: translateY(0);
     box-shadow: 2px 2px 0px 0px var(--shadow-color);
 }
+
 .link-text {
     color: var(--accent-color);
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
 }
+
 .link-text:hover {
     color: var(--link-hover-color);
 }
+
 .hidden {
     display: none;
 }
+
 /* Custom styling for the header icon and text */
 .header-section {
     text-align: center;
     margin-bottom: 2rem;
 }
+
 .header-icon {
     width: 80px;
     height: 80px;
@@ -122,16 +135,20 @@ button {
     margin-bottom: 1rem;
     box-shadow: 6px 6px 0px 0px var(--shadow-color);
 }
+
 .header-icon svg {
     width: 50px;
     height: 50px;
 }
+
 .header-icon svg path[fill="#FCD34D"] {
     fill: var(--accent-color);
 }
+
 .header-icon svg path[fill="white"] {
     fill: var(--card-bg-color);
 }
+
 .header-icon svg path[stroke="black"] {
     stroke: var(--border-color);
 }
@@ -143,6 +160,7 @@ button {
     margin-bottom: 0.5rem;
     letter-spacing: -0.05em;
 }
+
 .flashwise-text {
     color: var(--text-color);
     font-size: 2.8rem;
@@ -174,12 +192,14 @@ button {
     border-bottom: 2px solid var(--border-color);
     margin-bottom: 1rem;
 }
+
 .dashboard-header-top .user-info {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-weight: 600;
 }
+
 .dashboard-header-top .user-avatar {
     width: 32px;
     height: 32px;
@@ -193,11 +213,13 @@ button {
     font-weight: 700;
     color: var(--text-color);
 }
+
 .dashboard-header-top .top-nav-menu {
     display: flex;
     gap: 1rem;
     align-items: center;
 }
+
 .dashboard-header-top .top-nav-menu button {
     background-color: transparent;
     color: var(--text-color);
@@ -206,6 +228,7 @@ button {
     padding: 0.5rem 1rem;
     font-weight: 600;
 }
+
 .dashboard-header-top .top-nav-menu button:hover {
     background-color: var(--bg-color);
 }
@@ -241,6 +264,7 @@ button {
     justify-content: space-between;
     align-items: center;
 }
+
 .dashboard-panel-header.yellow-text {
     color: var(--accent-color);
 }
@@ -253,6 +277,7 @@ button {
     overflow-y: auto;
     padding-right: 0.5rem;
 }
+
 .deck-item {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
@@ -264,6 +289,7 @@ button {
     font-weight: 500;
     box-shadow: 2px 2px 0px 0px var(--shadow-color);
 }
+
 .deck-item .deck-actions button {
     background-color: transparent;
     color: var(--text-color);
@@ -271,6 +297,7 @@ button {
     padding: 0.25rem 0.5rem;
     box-shadow: none;
 }
+
 .deck-item .deck-actions button:hover {
     background-color: var(--bg-color);
 }
@@ -288,6 +315,7 @@ button {
     align-items: center;
     z-index: 1000;
 }
+
 .modal-content {
     background-color: var(--card-bg-color);
     padding: 2rem;
@@ -304,6 +332,7 @@ button {
     position: relative;
     color: var(--text-color);
 }
+
 .modal-content .close-btn {
     position: absolute;
     top: 1rem;
@@ -316,22 +345,26 @@ button {
     line-height: 1;
     color: var(--text-color);
 }
+
 .modal-content h2 {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
     text-align: center;
 }
+
 .modal-content p {
     font-size: 1rem;
     margin-bottom: 1.5rem;
 }
+
 .modal-content .modal-actions {
     display: flex;
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
 }
+
 .modal-content .modal-actions button {
     flex: 1;
 }
@@ -343,6 +376,7 @@ button {
     gap: 0.5rem;
     margin-top: 1rem;
 }
+
 #createDeckModal .deck-timer-setting input {
     width: 80px;
     text-align: center;
@@ -362,11 +396,13 @@ button {
     overflow: hidden;
     margin-bottom: 1rem;
 }
+
 .card-image-preview img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
 }
+
 .card-image-preview .placeholder-icon {
     color: var(--text-color);
     font-size: 3rem;
@@ -387,12 +423,14 @@ button {
     max-width: 600px;
     margin: 0 auto;
 }
+
 .quiz-timer {
     font-size: 3rem;
     font-weight: 700;
     color: var(--accent-color);
     text-shadow: 2px 2px 0px var(--border-color);
 }
+
 .quiz-card {
     background-color: var(--accent-color);
     border: 2px solid var(--border-color);
@@ -403,17 +441,21 @@ button {
     text-align: center;
     min-height: 200px;
     display: flex;
-    flex-direction: column; /* Ensure content stacks vertically */
+    flex-direction: column;
+    /* Ensure content stacks vertically */
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: transform 0.6s;
     transform-style: preserve-3d;
 }
+
 .quiz-card.flipped {
     transform: rotateY(180deg);
 }
-.quiz-card .front, .quiz-card .back {
+
+.quiz-card .front,
+.quiz-card .back {
     backface-visibility: hidden;
     /* Remove position absolute to prevent overlapping */
     /* position: absolute; */
@@ -423,32 +465,40 @@ button {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0; /* Adjust padding as needed, inherited from .quiz-card */
+    padding: 0;
+    /* Adjust padding as needed, inherited from .quiz-card */
     box-sizing: border-box;
     color: var(--text-color);
 }
+
 .quiz-card .back {
     transform: rotateY(180deg);
 }
+
 .quiz-card-wrapper {
     position: relative;
     width: 100%;
     perspective: 1000px;
     height: 250px;
 }
-.quiz-card h2, .quiz-card p {
+
+.quiz-card h2,
+.quiz-card p {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-color);
     margin: 0;
     word-break: break-word;
 }
+
 .quiz-card .card-image {
     max-width: 100%;
     max-height: 120px;
     object-fit: contain;
-    margin-bottom: 0.75rem; /* Add margin below image for spacing */
+    margin-bottom: 0.75rem;
+    /* Add margin below image for spacing */
 }
+
 .quiz-navigation button {
     background-color: var(--border-color);
     color: white;
@@ -458,6 +508,7 @@ button {
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
     margin: 0 0.5rem;
 }
+
 .quiz-navigation button:hover {
     background-color: var(--button-hover-bg);
 }
@@ -476,6 +527,7 @@ button {
     padding: 1rem;
     box-sizing: border-box;
 }
+
 .deck-management-header {
     display: flex;
     justify-content: space-between;
@@ -484,12 +536,14 @@ button {
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
 }
+
 .deck-management-header h2 {
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-color);
     margin: 0;
 }
+
 .deck-management-header .back-btn {
     background: none;
     border: none;
@@ -500,9 +554,11 @@ button {
     padding: 0;
     transition: transform 0.1s;
 }
+
 .deck-management-header .back-btn:hover {
     transform: translateX(-3px);
 }
+
 .deck-info {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
@@ -515,12 +571,14 @@ button {
     align-items: center;
     box-shadow: 2px 2px 0px 0px var(--shadow-color);
 }
+
 .card-management-section {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     flex-grow: 1;
 }
+
 .card-management-header {
     display: flex;
     justify-content: space-between;
@@ -531,6 +589,7 @@ button {
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.5rem;
 }
+
 .card-list {
     flex-grow: 1;
     overflow-y: auto;
@@ -539,6 +598,7 @@ button {
     flex-direction: column;
     gap: 0.75rem;
 }
+
 .card-item-summary {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
@@ -550,6 +610,7 @@ button {
     font-weight: 500;
     box-shadow: 2px 2px 0px 0px var(--shadow-color);
 }
+
 .card-item-summary .card-actions button {
     background-color: transparent;
     color: var(--text-color);
@@ -557,6 +618,7 @@ button {
     padding: 0.25rem 0.5rem;
     box-shadow: none;
 }
+
 .card-item-summary .card-actions button:hover {
     background-color: var(--bg-color);
 }
@@ -572,6 +634,7 @@ button {
     flex-direction: column;
     gap: 1rem;
 }
+
 .mode-selection-section h3 {
     font-size: 1.5rem;
     font-weight: 700;
@@ -580,11 +643,13 @@ button {
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
 }
+
 .mode-options {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
+
 .mode-option label {
     display: flex;
     align-items: center;
@@ -592,6 +657,7 @@ button {
     cursor: pointer;
     font-weight: 500;
 }
+
 .mode-option input[type="radio"] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -605,10 +671,12 @@ button {
     position: relative;
     cursor: pointer;
 }
+
 .mode-option input[type="radio"]:checked {
     background-color: var(--accent-color);
     border-color: var(--border-color);
 }
+
 .mode-option input[type="radio"]:checked::after {
     content: '';
     position: absolute;
@@ -620,17 +688,20 @@ button {
     background: var(--border-color);
     transform: translate(-50%, -50%);
 }
+
 .mode-timer-setting {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.5rem;
 }
+
 .mode-timer-setting input {
     width: 100px;
     text-align: center;
     background-color: var(--bg-color);
 }
+
 .mode-start-btn {
     margin-top: 1.5rem;
 }
@@ -639,6 +710,7 @@ button {
 .feedback-correct {
     color: #22c55e;
 }
+
 .feedback-incorrect {
     color: #ef4444;
 }
@@ -655,10 +727,12 @@ button {
     border: 2px solid var(--border-color);
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
+
 .quiz-choice-buttons button:hover {
     background-color: var(--button-hover-bg);
     transform: translateY(-2px);
 }
+
 .quiz-choice-buttons button:active {
     transform: translateY(0);
     box-shadow: 2px 2px 0px 0px var(--shadow-color);
@@ -666,23 +740,32 @@ button {
 
 /* Shake animation for invalid input */
 .shake {
-    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     perspective: 1000px;
 }
 
 @keyframes shake {
-    10%, 90% {
+
+    10%,
+    90% {
         transform: translate3d(-1px, 0, 0);
     }
-    20%, 80% {
+
+    20%,
+    80% {
         transform: translate3d(2px, 0, 0);
     }
-    30%, 50%, 70% {
+
+    30%,
+    50%,
+    70% {
         transform: translate3d(-4px, 0, 0);
     }
-    40%, 60% {
+
+    40%,
+    60% {
         transform: translate3d(4px, 0, 0);
     }
 }
@@ -692,16 +775,20 @@ button {
     .dashboard-main-content {
         flex-direction: column;
     }
+
     .dashboard-panel {
         flex: none;
         width: 100%;
     }
+
     .deck-management-wrapper {
         padding: 0.5rem;
     }
+
     .deck-management-header h2 {
         font-size: 1.5rem;
     }
+
     .deck-info {
         flex-direction: column;
         align-items: flex-start;
@@ -713,7 +800,7 @@ button {
     width: 600px;
     background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     padding: 24px;
 }
 
@@ -772,25 +859,25 @@ button {
 }
 
 body.dark-mode #profile-page {
-  background-color: #1f2937; 
+    background-color: #1f2937;
 }
 
 
 body.dark-mode .profile-card {
-  background-color: #374151; 
-  border-color: #4b5563;
+    background-color: #374151;
+    border-color: #4b5563;
 }
 
 
 body.dark-mode #profile-content-area .bg-white {
-  background-color: #4b5563; 
-  border-color: #6b7280;
+    background-color: #4b5563;
+    border-color: #6b7280;
 }
 
 
 body.dark-mode .text-gray-900,
 body.dark-mode .font-semibold {
-  color: #f9fafb; 
+    color: #f9fafb;
 }
 
 body.dark-mode .text-gray-500,
@@ -798,18 +885,18 @@ body.dark-mode .text-gray-600,
 body.dark-mode .text-gray-700,
 body.dark-mode #profile-display-id,
 body.dark-mode #profile-display-bio {
-  color: #d1d5db; 
+    color: #d1d5db;
 }
 
 
 body.dark-mode .profile-tab.active-tab {
-  color: #f9fafb;
-  border-bottom-color: #f9fafb;
+    color: #f9fafb;
+    border-bottom-color: #f9fafb;
 }
 
 body.dark-mode .profile-tab {
-  color: #9ca3af;
-  border-bottom-color: #374151;
+    color: #9ca3af;
+    border-bottom-color: #374151;
 }
 
 /* Styles the 'Edit Bio' button text */

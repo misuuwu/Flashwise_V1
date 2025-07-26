@@ -33,7 +33,7 @@ const loginPasswordInput = document.getElementById('loginpassword');
 // Event listener for signup form submission
 if (signupForm) {
     signupForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); 
 
         const tupId = tupIdInput.value;
         const email = signupEmailInput.value;
@@ -63,7 +63,7 @@ if (signupForm) {
                 console.log("User signed up and data saved to Firestore successfully!");
                 // Replaced alert with showMessageBox
                 showMessageBox('Sign Up Successful', 'You have successfully signed up! Please log in.', () => {
-                    window.location.href = "login.html"; // Redirect to login after successful signup
+                    window.location.href = "login.html"; 
                 });
             })
             .catch((error) => {
