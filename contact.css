@@ -39,7 +39,7 @@
             border-radius: 0.5rem; /* rounded-lg */
             background-color: var(--input-bg); /* Assuming a CSS variable for input background */
             color: var(--text-color);
-            box-shadow: inset 1px 1px 0px 0px var(--shadow-color-light); /* Inner shadow for depth */
+            box-shadow: inset 1px 1px 0px 0px var(--shadow-color-light); 
             transition: border-color 0.2s;
         }
 
@@ -47,21 +47,21 @@
         input[type="email"]:focus,
         textarea:focus {
             outline: none;
-            border-color: var(--accent-color); /* Highlight on focus */
+            border-color: var(--accent-color); 
         }
 
         textarea {
-            min-height: 8rem; /* Enough height for messages */
-            resize: vertical; /* Allow vertical resizing */
+            min-height: 8rem; 
+            resize: vertical; 
         }
 
         /* Button styling (from index.html) */
         .btn-primary {
             background-color: var(--accent-color);
             color: var(--button-text-color);
-            padding: 0.75rem 1.5rem; /* py-3 px-6 */
-            border-radius: 0.5rem; /* rounded-lg */
-            font-weight: 600; /* font-semibold */
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem; 
+            font-weight: 600; 
             transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             border: 2px solid var(--border-color);
             box-shadow: 2px 2px 0px 0px var(--shadow-color);
