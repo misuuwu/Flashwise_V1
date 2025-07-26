@@ -1335,9 +1335,9 @@ function updateQuizScoreDisplay() {
 
 function recordAnswer(isCorrect, chosenAnswer = '') {
     const currentCard = currentQuizSet[currentCardIndex];
-    if (currentCard.answered) return; // Prevent multiple answers for the same card
+    if (currentCard.answered) return; 
 
-    currentCard.answered = true; // Mark card as answered
+    currentCard.answered = true; 
     totalQuestionsAnswered++;
 
     if (isCorrect) {
@@ -1361,9 +1361,9 @@ function recordAnswer(isCorrect, chosenAnswer = '') {
         Array.from(quizChoiceButtons.children).forEach(button => {
             button.disabled = true;
             if (button.textContent === currentCard.answer) {
-                button.classList.add('correct-answer-btn'); // Highlight correct answer
+                button.classList.add('correct-answer-btn');
             } else if (button.textContent === chosenAnswer && !isCorrect) {
-                button.classList.add('incorrect-answer-btn'); // Highlight chosen incorrect answer
+                button.classList.add('incorrect-answer-btn');
             }
         });
     }

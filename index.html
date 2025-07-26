@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Link to your custom stylesheet -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Icons for buttons --> 
+    <!-- Icons for buttons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
- 
+
 
 </head>
+
 <body>
 
     <!-- Message Box Element (Custom alert/confirm modal) -->
@@ -35,7 +37,8 @@
                 <!-- Yes button for confirmation messages -->
                 <button id="messageBoxConfirmYesBtn" class="btn-primary hidden">Yes</button>
                 <!-- No button for confirmation messages (styled differently) -->
-                <button id="messageBoxConfirmNoBtn" class="btn-primary hidden" style="background-color: var(--button-hover-bg); border-color: var(--border-color);">No</button>
+                <button id="messageBoxConfirmNoBtn" class="btn-primary hidden"
+                    style="background-color: var(--button-hover-bg); border-color: var(--border-color);">No</button>
             </div>
         </div>
     </div>
@@ -51,7 +54,8 @@
                     <input type="text" id="new-deck-name" placeholder="Enter deck name">
                 </div>
                 <div class="mb-4 text-left">
-                    <label for="new-deck-timer" class="block text-sm font-bold mb-2">Default Quiz Timer (seconds):</label>
+                    <label for="new-deck-timer" class="block text-sm font-bold mb-2">Default Quiz Timer
+                        (seconds):</label>
                     <input type="number" id="new-deck-timer" value="60" min="10" step="5">
                 </div>
                 <div class="modal-actions">
@@ -85,7 +89,8 @@
                 <div class="modal-actions">
                     <button type="submit" class="btn-primary">Save Card</button>
                     <!-- Delete button for cards (only visible when editing) -->
-                    <button type="button" id="delete-card-btn" class="btn-primary" style="background-color: #dc2626; border-color: #dc2626; display: none;">Delete Card</button>
+                    <button type="button" id="delete-card-btn" class="btn-primary"
+                        style="background-color: #dc2626; border-color: #dc2626; display: none;">Delete Card</button>
                 </div>
             </form>
         </div>
@@ -113,7 +118,9 @@
     <div id="dashboard-page" class="dashboard-wrapper">
         <div class="dashboard-header-top">
             <div class="user-info">
-                <a href ="profile.html"> <div class="user-avatar">U#</div></a>
+                <a href="profile.html">
+                    <div class="user-avatar">U#</div>
+                </a>
                 <span id="user-display-name">username#001</span>
             </div>
             <div class="top-nav-menu">
@@ -127,7 +134,8 @@
             <div class="dashboard-panel flex-grow">
                 <div class="dashboard-panel-header">
                     Decks
-                    <button id="create-deck-btn" class="btn-primary px-3 py-1 text-sm leading-none" style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">+ Create Deck</button>
+                    <button id="create-deck-btn" class="btn-primary px-3 py-1 text-sm leading-none"
+                        style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">+ Create Deck</button>
                 </div>
                 <div id="my-decks-container" class="deck-list">
                     <!-- User's decks will be dynamically loaded here -->
@@ -139,7 +147,8 @@
             <div class="dashboard-panel flex-grow">
                 <div class="dashboard-panel-header yellow-text">
                     Shared Decks
-                    <button id="import-deck-btn" class="btn-primary px-3 py-1 text-sm leading-none" style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">Import Deck</button>
+                    <button id="import-deck-btn" class="btn-primary px-3 py-1 text-sm leading-none"
+                        style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">Import Deck</button>
                 </div>
                 <div id="shared-decks-container" class="deck-list">
                     <p class="py-4 text-center">No decks have been shared yet.</p>
@@ -166,7 +175,8 @@
         <div class="card-management-section flex-grow">
             <div class="card-management-header">
                 Cards
-                <button id="add-new-card-btn" class="btn-primary px-3 py-1 text-sm leading-none" style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">+ Create Card</button>
+                <button id="add-new-card-btn" class="btn-primary px-3 py-1 text-sm leading-none"
+                    style="box-shadow: 2px 2px 0px 0px var(--shadow-color);">+ Create Card</button>
             </div>
             <div id="current-deck-cards-list" class="card-list">
                 <p class="py-4 text-center">No cards in this deck yet. Add some!</p>
@@ -243,4 +253,5 @@
     <script src="utils.js"></script>
     <script type="module" src="app.js" defer></script>
 </body>
+
 </html>
