@@ -871,13 +871,13 @@ async function openShareDeckModal(deckId) {
             cards: deckToShare.cards,
             ownerId: deckToShare.ownerId,
             ownerDisplayName: deckToShare.ownerDisplayName,
-            shareId: deckToShare.shareId // Store shareId within the document for easy lookup
-        }, { merge: true }); // Use merge to update if exists, create if not
+            shareId: deckToShare.shareId 
+        }, { merge: true }); 
 
-        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`; // Adjusted link for index.html
+        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`; 
         if (shareDeckLinkInput) shareDeckLinkInput.value = shareLink;
         shareDeckModal?.classList.remove('hidden');
-        renderSharedFlashcardSets(); // Update shared decks list on dashboard
+        renderSharedFlashcardSets(); 
         showMessageBox('Deck Shared!', 'Your deck is now shareable. Copy the link!');
 
     } catch (error) {
