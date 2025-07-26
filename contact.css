@@ -1,0 +1,156 @@
+   /* Custom styles for the contact page, if needed, to match the dashboard's aesthetic */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color); /* Assuming a CSS variable for background */
+            color: var(--text-color); /* Assuming a CSS variable for text color */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Replicating the dashboard's main container styling */
+        .page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 1rem; /* Added padding for smaller screens */
+        }
+
+        .contact-card {
+            background-color: var(--card-bg); /* Assuming a CSS variable for card background */
+            border: 2px solid var(--border-color); /* Assuming a CSS variable for border color */
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 4px 4px 0px 0px var(--shadow-color); /* Custom shadow to match dashboard panels */
+            padding: 2.5rem; /* p-10 */
+            width: 100%;
+            max-width: 50rem; /* Increased max-width for wider container */
+            text-align: center;
+        }
+
+        /* Input field styling to match existing forms */
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem; /* py-3 px-4 */
+            margin-bottom: 1rem; /* mb-4 */
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: var(--input-bg); /* Assuming a CSS variable for input background */
+            color: var(--text-color);
+            box-shadow: inset 1px 1px 0px 0px var(--shadow-color-light); /* Inner shadow for depth */
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color); /* Highlight on focus */
+        }
+
+        textarea {
+            min-height: 8rem; /* Enough height for messages */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        /* Button styling (from index.html) */
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            padding: 0.75rem 1.5rem; /* py-3 px-6 */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-weight: 600; /* font-semibold */
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 2px solid var(--border-color);
+            box-shadow: 2px 2px 0px 0px var(--shadow-color);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #c59418;
+            box-shadow: 3px 3px 0px 0px var(--shadow-color);
+        }
+
+        /* Header styling from index.html */
+        .dashboard-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--header-bg); /* Assuming header background variable */
+            border-bottom: 2px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-radius: 0.75rem; /* rounded-lg */
+            margin: 1rem;
+            box-shadow: 4px 4px 0px 0px var(--shadow-color); /* Custom shadow */
+            width: calc(100% - 2rem); /* Stretched to full width minus margin */
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.125rem;
+            border: 2px solid var(--border-color);
+            box-shadow: 2px 2px 0px 0px var(--shadow-color);
+        }
+
+        .top-nav-menu a,
+        .top-nav-menu button {
+            margin-left: 1.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .top-nav-menu a:hover,
+        .top-nav-menu button:hover {
+            color: var(--accent-color);
+        }
+
+        /* Define CSS variables for consistent theming */
+        :root {
+            --bg-color: #f0f0f0;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --border-color: #333;
+            --shadow-color: #333;
+            --shadow-color-light: rgba(0, 0, 0, 0.1);
+            --button-bg: #4a90e2;
+            --button-hover-bg: #357ABD;
+            --button-text-color: #ffffff;
+            --header-bg: #ffffff;
+            --input-bg: #f9f9f9;
+            --accent-color: #f7b731; /* Yellowish accent */
+        }
+
+        /* Dark mode adjustments (from your styles.css or app.js logic) */
+        body.dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --card-bg: #2a2a2a;
+            --border-color: #e0e0e0;
+            --shadow-color: #e0e0e0;
+            --shadow-color-light: rgba(255, 255, 255, 0.1);
+            --button-bg: #4a90e2;
+            --button-hover-bg: #357ABD;
+            --button-text-color: #ffffff;
+            --header-bg: #2a2a2a;
+            --input-bg: #3a3a3a;
+            --accent-color: #f7b731;
+        }

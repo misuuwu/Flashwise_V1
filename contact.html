@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashWise - Contact Us</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Link to your custom stylesheet (assuming styles.css exists and has common styles) -->
+    <link rel="stylesheet" href="styles.css">
+     <link rel="stylesheet" href="contact.css">
+    <!-- Icons for buttons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Message Box Element (Custom alert/confirm modal) -->
+    <div id="messageBox" class="hidden modal-overlay">
+        <div class="modal-content">
+            <!-- Close button for the modal -->
+            <button class="close-btn" id="messageBoxModalCloseX">&times;</button>
+            <h2 id="messageBoxTitle"></h2>
+            <p id="messageBoxContent"></p>
+            <!-- New: Input field for Share ID in message box -->
+            <div id="messageBoxInputContainer" class="mb-4 text-left hidden">
+                <label for="messageBoxInput" class="block text-sm font-bold mb-2" id="messageBoxInputLabel"></label>
+                <input type="text" id="messageBoxInput" placeholder="">
+            </div>
+            <div class="modal-actions">
+                <!-- OK button for simple messages -->
+                <button id="messageBoxOkBtn" class="btn-primary">OK</button>
+                <!-- Yes button for confirmation messages -->
+                <button id="messageBoxConfirmYesBtn" class="btn-primary hidden">Yes</button>
+                <!-- No button for confirmation messages (styled differently) -->
+                <button id="messageBoxConfirmNoBtn" class="btn-primary hidden"
+                    style="background-color: var(--button-hover-bg); border-color: var(--border-color);">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section - Replicated from Dashboard -->
+    <div class="dashboard-header-top">
+        <div class="user-info">
+            <!-- This could be a static placeholder or linked to a profile page if it exists -->
+            <a href="index.html">
+                <div class="user-avatar">FW</div> <!-- FlashWise initials -->
+            </a>
+            <span id="app-name">FlashWise</span>
+        </div>
+        <div class="top-nav-menu">
+            <a href="index.html">Dashboard</a>
+            <button id="night-mode-toggle">Night Mode (Toggle)</button>
+            <button id="logout-button">Logout</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area for Contact Form -->
+    <div class="page-container">
+        <div class="contact-card">
+            <h2 class="text-3xl font-bold mb-6 text-center">Contact Us</h2>
+
+            <p class="mb-6 text-center text-gray-700 dark:text-gray-300">
+                Have questions, feedback, or need support? We'd love to hear from you!
+                Please fill out the form below or reach out to us directly.
+            </p>
+
+            <form id="contact-form" method="POST" class="w-full max-w-lg mx-auto">
+                <div class="mb-4 text-left">
+                    <label for="name" class="block text-sm font-bold mb-2">Your Name:</label>
+                    <input type="text" id="name" name="user_name" placeholder="Your Name" required>
+                </div>
+                <div class="mb-4 text-left">
+                    <label for="email" class="block text-sm font-bold mb-2">Your Email:</label>
+                    <input type="email" id="email" name="user_email" placeholder="you@example.com" required>
+                </div>
+                <div class="mb-6 text-left">
+                    <label for="message" class="block text-sm font-bold mb-2">Your Message:</label>
+                    <textarea id="message" name="message" placeholder="Type your message here..." rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-full">Send Message</button>
+            </form>
+
+            <div class="mt-8 text-center text-gray-600 dark:text-gray-400">
+                <p>Alternatively, you can reach us at:</p>
+                <p class="mt-2">
+                    Email: <a href="mailto:support@flashwise.com" class="text-blue-600 hover:underline dark:text-blue-400">support@flashwise.com</a>
+                </p>
+                <p>
+                    Phone: <a href="tel:+1234567890" class="text-blue-600 hover:underline dark:text-blue-400">+1 (234) 567-890</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Include EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Your custom contact page JavaScript -->
+    <script type="module" src="contact.js"></script>
+</body>
+
+</html>
