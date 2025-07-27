@@ -112,7 +112,7 @@ function showMessageBox(title, message, onOkCallback = null, showInput = false, 
 
     if (!messageBox || !messageBoxTitle || !messageBoxContent || !messageBoxOkBtn || !messageBoxInputContainer || !messageBoxInputLabel || !messageBoxInput || !messageBoxConfirmYesBtn || !messageBoxConfirmNoBtn || !messageBoxModalCloseX) {
         console.error('One or more message box elements not found. Falling back to alert.');
-        alert(`${title}: ${message}`); // Fallback to native alert
+        alert(`${title}: ${message}`); 
         if (onOkCallback) onOkCallback();
         return;
     }
