@@ -13,14 +13,14 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
 
     messageBoxTitle.textContent = title;
     messageBoxContent.textContent = message;
-    messageBox.classList.remove('hidden'); 
+    messageBox.classList.remove('hidden');
 
     // Hide all action buttons and input container first
     messageBoxOkBtn.classList.add('hidden');
     messageBoxConfirmYesBtn.classList.add('hidden');
     messageBoxConfirmNoBtn.classList.add('hidden');
     messageBoxInputContainer.classList.add('hidden');
-    messageBoxInput.value = ''; 
+    messageBoxInput.value = '';
 
     // Remove previous event listeners to prevent multiple triggers
     messageBoxOkBtn.onclick = null;
@@ -34,15 +34,15 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
         messageBoxInputLabel.textContent = inputLabel;
         messageBoxInput.placeholder = inputPlaceholder;
         messageBoxInput.type = inputType;
-        messageBoxInput.focus(); 
+        messageBoxInput.focus();
 
         // Only show OK button for input dialog
         messageBoxOkBtn.classList.remove('hidden');
         messageBoxOkBtn.onclick = () => {
             const inputValue = messageBoxInput.value.trim();
-            messageBox.classList.add('hidden'); 
+            messageBox.classList.add('hidden');
             if (onConfirmOrOkCallback) {
-                onConfirmOrOkCallback(inputValue); 
+                onConfirmOrOkCallback(inputValue);
             }
         };
         messageBoxModalCloseX.onclick = () => {
@@ -56,14 +56,14 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
 
         // Attach event listener for 'Yes' button
         messageBoxConfirmYesBtn.onclick = () => {
-            messageBox.classList.add('hidden'); 
+            messageBox.classList.add('hidden');
             if (onConfirmOrOkCallback) {
-                onConfirmOrOkCallback(); 
+                onConfirmOrOkCallback();
             }
         };
         // Attach event listener for 'No' button
         messageBoxConfirmNoBtn.onclick = () => {
-            messageBox.classList.add('hidden'); 
+            messageBox.classList.add('hidden');
         };
         // X button acts like 'No' in a confirm dialog
         messageBoxModalCloseX.onclick = () => {
@@ -73,9 +73,9 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
         // Show only 'OK' button for simple alerts
         messageBoxOkBtn.classList.remove('hidden');
         messageBoxOkBtn.onclick = () => {
-            messageBox.classList.add('hidden'); 
+            messageBox.classList.add('hidden');
             if (onConfirmOrOkCallback) {
-                onConfirmOrOkCallback(); 
+                onConfirmOrOkCallback();
             }
         };
         // X button acts like 'OK' in a simple alert
@@ -88,15 +88,13 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
 
 function triggerShakeAnimation(element) {
     element.classList.add('shake');
-    // Remove the shake class after the animation completes
     element.addEventListener('animationend', () => {
         element.classList.remove('shake');
-    }, { once: true }); 
+    }, { once: true });
 }
 
 
 function isValidEmail(email) {
-    // A simple regex for email validation (can be more robust if needed)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }

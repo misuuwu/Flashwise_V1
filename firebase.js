@@ -39,7 +39,7 @@ const loginPasswordInput = document.getElementById('loginpassword');
 
 // <--- NEW: Get forgot password form element
 const forgotPasswordForm = document.getElementById('forgot-password-form');
-const resetEmailInput = document.getElementById('resetEmail'); // Assuming input ID is 'resetEmail'
+const resetEmailInput = document.getElementById('resetEmail');
 
 const loadingOverlay = document.getElementById('loadingOverlay');
 
@@ -55,13 +55,7 @@ function hideLoading() {
     }
 }
 
-// Ensure showMessageBox and triggerShakeAnimation are globally available or imported if needed
-// If these are in utils.js, ensure utils.js is loaded before this script or its functions are exported.
-// For example, if they are in utils.js and utils.js is a module, you'd do:
-// import { showMessageBox, triggerShakeAnimation } from './utils.js';
 
-// Assuming showMessageBox is globally accessible (e.g., defined in utils.js and loaded via <script src="utils.js"></script>)
-// If not, you'll need to define it here or import it.
 function showMessageBox(title, content, type = 'alert') {
     const messageBox = document.getElementById('messageBox');
     const messageBoxTitle = document.getElementById('messageBoxTitle');
@@ -78,7 +72,7 @@ function showMessageBox(title, content, type = 'alert') {
     messageBoxOkBtn.classList.add('hidden');
     messageBoxConfirmYesBtn.classList.add('hidden');
     messageBoxConfirmNoBtn.classList.add('hidden');
-    if (messageBoxInputContainer) { // Check if it exists before trying to modify
+    if (messageBoxInputContainer) {
         messageBoxInputContainer.classList.add('hidden');
     }
 
@@ -110,11 +104,11 @@ function showMessageBox(title, content, type = 'alert') {
             resolve(false);
         };
         const handleCloseX = () => {
-             messageBox.classList.add('hidden');
-             messageBoxOkBtn.removeEventListener('click', handleOk);
-             messageBoxConfirmYesBtn.removeEventListener('click', handleYes);
-             messageBoxConfirmNoBtn.removeEventListener('click', handleNo);
-             resolve(false);
+            messageBox.classList.add('hidden');
+            messageBoxOkBtn.removeEventListener('click', handleOk);
+            messageBoxConfirmYesBtn.removeEventListener('click', handleYes);
+            messageBoxConfirmNoBtn.removeEventListener('click', handleNo);
+            resolve(false);
         };
 
         if (type === 'confirm') {
@@ -131,30 +125,15 @@ function showMessageBox(title, content, type = 'alert') {
     });
 }
 
-// Assuming triggerShakeAnimation is globally accessible or imported.
-// If not, you'd define it here or import it.
 function triggerShakeAnimation(element) {
     if (element) {
-        element.classList.add('shake-animation');
+        element.classList.add('shake');
         element.addEventListener('animationend', () => {
-            element.classList.remove('shake-animation');
+            element.classList.remove('shake');
         }, { once: true });
     }
 }
-// You would also need to add 'shake-animation' CSS in your styles.css
-/*
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-.shake-animation {
-    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-}
-*/
+
 
 
 // Event listener for signup form submission
@@ -186,7 +165,7 @@ if (signupForm) {
                 showMessageBox('Signup Success', 'Account created successfully! Redirecting to login...', 'alert');
                 setTimeout(() => {
                     window.location.href = "login.html";
-                }, 1500); // Redirect after message is seen
+                }, 1500); 
             })
             .catch((error) => {
                 const errorMessage = error.message;
@@ -221,9 +200,9 @@ if (loginForm) {
                 // Signed in
                 const user = userCredential.user;
                 console.log("User logged in:", user);
-                showMessageBox('Login Success', 'Logged in successfully! Redirecting...', 'alert');
+                showMessageBox('Login Success', 'Logged in successfully!');
                 setTimeout(() => {
-                    window.location.href = "index.html"; // Redirect to your main app page
+                    window.location.href = "index.html"; 
                 }, 1500);
             })
             .catch((error) => {
@@ -242,7 +221,7 @@ if (loginForm) {
 if (forgotPasswordForm) {
     forgotPasswordForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = resetEmailInput.value; // Get email from the specific input on this form
+        const email = resetEmailInput.value;
 
         if (!email) {
             showMessageBox('Error', 'Please enter your email address to reset your password.');
@@ -254,11 +233,10 @@ if (forgotPasswordForm) {
         try {
             await sendPasswordResetEmail(auth, email);
             showMessageBox('Password Reset Sent', 'If an account with that email exists, a password reset link has been sent to your email address. Please check your inbox (and spam folder).', 'alert');
-            // Optionally clear the input field after sending
+
             resetEmailInput.value = '';
         } catch (error) {
             console.error("Password reset error:", error.message);
-            // It's good practice not to reveal whether an email exists for security reasons
             showMessageBox('Password Reset Failed', 'An error occurred while sending the reset link. Please try again later.', 'error');
         } finally {
             hideLoading();

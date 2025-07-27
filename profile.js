@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let historyHtml = '';
             if (querySnapshot.empty) {
                 historyHtml = '<p class="text-center text-gray-500">No session history found.</p>';
-                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); 
+                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden');
             } else {
 
                 historyHtml = '<div class="flex flex-wrap gap-4 justify-start">';

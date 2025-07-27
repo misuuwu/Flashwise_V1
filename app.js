@@ -128,7 +128,7 @@ function showMessageBox(title, message, onOkCallback = null, showInput = false, 
         messageBoxInputContainer.classList.remove('hidden');
         messageBoxInputLabel.textContent = inputLabel;
         messageBoxInput.placeholder = inputPlaceholder;
-        messageBoxInput.type = inputType; // Set input type
+        messageBoxInput.type = inputType;
         messageBoxInput.value = '';
     } else {
         messageBoxInputContainer.classList.add('hidden');
@@ -218,25 +218,25 @@ let hasInitializedDashboardListeners = false;
 
 
 function initDashboardListeners() {
-    if (hasInitializedDashboardListeners) return; // Prevent re-initialization
+    if (hasInitializedDashboardListeners) return;
 
     // --- Logout Button Listener ---
-if (logoutButton) {
-    logoutButton.addEventListener('click', () => {
-        showLoading(); // Show loading animation immediately
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            showLoading(); // Show loading animation immediately
 
-        signOut(auth).then(() => {
-            console.log("User signed out successfully.");
-            
-           
-        }).catch((error) => {
-            console.error("Error signing out:", error);
-            showMessageBox('Error', 'Error logging out: ' + error.message);
-        }).finally(() => {
-            hideLoading(); 
+            signOut(auth).then(() => {
+                console.log("User signed out successfully.");
+
+
+            }).catch((error) => {
+                console.error("Error signing out:", error);
+                showMessageBox('Error', 'Error logging out: ' + error.message);
+            }).finally(() => {
+                hideLoading();
+            });
         });
-    });
-}
+    }
     // --- Night Mode Toggle Functionality ---
     if (nightModeToggle) {
         nightModeToggle.addEventListener('click', () => {
@@ -581,18 +581,22 @@ if (logoutButton) {
 
 
                 if (quizMode === 'quiz' && quizChoiceButtons) {
-                    // Only generate and display multiple choices if in quiz mode
                     quizChoiceButtons.classList.remove('hidden');
-                    quizChoiceButtons.innerHTML = ''; // Clear previous buttons
+                    quizChoiceButtons.innerHTML = ''; 
 
-                    const choices = generateChoices(card.answer, currentQuizSet, 3); // 3 distractors
+                    const choices = generateChoices(card.answer, currentQuizSet, 3); 
 
                     choices.forEach(choiceText => {
                         const choiceBtn = document.createElement('button');
-                        choiceBtn.textContent = choiceText;
-                        // Add classes for text wrapping and overflow handling
+
+                        // Create an inner span element for the text content
+                        const textSpan = document.createElement('span');
+                        textSpan.textContent = choiceText;
+                        textSpan.classList.add('button-text-content'); 
+
+                        choiceBtn.appendChild(textSpan); 
                         choiceBtn.classList.add('btn-primary', 'py-3', 'text-base', 'text-wrap-fix');
-                        choiceBtn.onclick = () => recordAnswer(choiceText === card.answer, choiceText);
+                        choiceBtn.onclick = () => recordAnswer(textSpan.textContent === card.answer, textSpan.textContent);
                         quizChoiceButtons.appendChild(choiceBtn);
                     });
                 } else if (quizMode === 'flashcards') {

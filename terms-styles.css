@@ -68,19 +68,52 @@ body {
 .header-icon {
     width: 80px;
     height: 80px;
-    margin: 0 auto 1rem;
-    background-color: var(--button-bg);
+    background-color: black;
+    border: 2px solid white;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
+    display: inline-flex;
     justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    box-shadow: 6px 6px 0px 0px var(--shadow-color);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.header-icon:hover {
+    transform: translateY(-4px);
+    box-shadow: 8px 8px 0px 0px var(--shadow-color);
+
+}
+
+.header-icon:active {
+    transform: translateY(0);
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
-    transition: background-color 0.3s ease;
+
 }
 
 .header-icon svg {
     width: 50px;
     height: 50px;
+}
+
+.header-icon svg path[fill="#FCD34D"] {
+    fill: var(--accent-color);
+
+}
+
+.header-icon svg path[fill="white"] {
+    fill: var(--card-bg-color);
+
+}
+
+.header-icon svg path[stroke="black"] {
+    stroke: white;
+
 }
 
 .welcome-text {
