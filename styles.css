@@ -243,7 +243,8 @@ button {
     align-items: center;
 }
 
-.dashboard-header-top .top-nav-menu button, a {
+.dashboard-header-top .top-nav-menu button,
+a {
     background-color: transparent;
     color: var(--text-color);
     border: none;
@@ -252,7 +253,8 @@ button {
     font-weight: bold;
 }
 
-.dashboard-header-top .top-nav-menu button:hover, .top-nav-menu a:hover {
+.dashboard-header-top .top-nav-menu button:hover,
+.top-nav-menu a:hover {
     background-color: grey;
     color: var(--accent-color);
 }
@@ -406,6 +408,43 @@ button {
     text-align: center;
 }
 
+/* Styles for the Shared Decks Container to enable scrolling */
+#shared-decks-container {
+    max-height: 550px; 
+    overflow-y: auto;  
+    padding-right: 15px; 
+}
+
+#shared-decks-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#shared-decks-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#shared-decks-container::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 10px;
+}
+
+#shared-decks-container::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+/* Dark mode adjustments for scrollbar (if you have dark mode enabled) */
+body.dark-mode #shared-decks-container::-webkit-scrollbar-track {
+    background: #374151; 
+}
+
+body.dark-mode #shared-decks-container::-webkit-scrollbar-thumb {
+    background: #6b7280; 
+}
+
+body.dark-mode #shared-decks-container::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af; 
+}
 
 /* Create Card Modal */
 .card-image-preview {
@@ -742,11 +781,11 @@ button {
 /* Styling for multiple choice buttons */
 .quiz-choice-buttons {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1rem;
     width: 100%;
-    max-width: 500px; 
-    margin: 0 auto; 
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .quiz-choice-buttons button {
@@ -761,16 +800,16 @@ button {
     box-shadow: 4px 4px 0px 0px var(--shadow-color);
 
     /* Text wrapping and sizing */
-    white-space: normal; 
+    white-space: normal;
     overflow-wrap: break-word;
     word-break: break-all;
-    min-width: 0; 
-    text-align: center; 
-    flex-grow: 1; 
-    font-size: clamp(0.75rem, 3vw, 1rem); 
-    line-height: 1.3; 
-    height: auto; 
-    display: flex; 
+    min-width: 0;
+    text-align: center;
+    flex-grow: 1;
+    font-size: clamp(0.75rem, 3vw, 1rem);
+    line-height: 1.3;
+    height: auto;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -791,6 +830,82 @@ button {
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     perspective: 1000px;
+}
+
+/* Loading Overlay Styles */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+/* Lightning-style Spinner Animation */
+.spinner {
+    /* Base for the circle */
+    border: 4px solid rgba(255, 255, 0, 0.2); 
+    border-top: 4px solid #FFD700; 
+    border-radius: 50%;
+    width: 50px; 
+    height: 50px;
+    animation:
+        spin 0.7s cubic-bezier(0.5, 0, 0.5, 1) infinite, 
+        pulseGlow 1.5s infinite alternate; 
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); 
+    position: relative; 
+    overflow: hidden; 
+}
+
+/* Add a flickering inner glow for more lightning effect */
+.spinner::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; 
+    height: 80%;
+    border-radius: 50%;
+    background-color: transparent;
+    box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5); 
+    animation: flicker 0.3s infinite alternate; 
+}
+
+
+/* Keyframes for the spin animation (adjusted speed) */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Keyframes for the pulsating glow */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 0px rgba(255, 255, 0, 0); 
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(255, 215, 0, 1), 0 0 10px 5px rgba(255, 255, 0, 0.5); 
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 0px rgba(255, 255, 0, 0);
+    }
+}
+
+/* Keyframes for the flicker effect */
+@keyframes flicker {
+    0% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+    100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
 }
 
 @keyframes shake {
@@ -844,12 +959,12 @@ button {
 
     /* Adjust quiz choice buttons for smaller screens */
     .quiz-choice-buttons {
-        grid-template-columns: 1fr; 
-        padding: 0 0.5rem; 
+        grid-template-columns: 1fr;
+        padding: 0 0.5rem;
     }
 
     .quiz-choice-buttons button {
-        padding: 0.75rem 1rem; 
+        padding: 0.75rem 1rem;
     }
 }
 

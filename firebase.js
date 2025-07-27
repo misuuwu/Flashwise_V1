@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js"; // Added updateProfile
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 export { auth, db };
 
@@ -20,9 +20,8 @@ const db = getFirestore(app);
 
 // Get signup form elements
 const signupForm = document.getElementById('signup-form');
-const tupIdInput = document.getElementById('tupId');
 const signupEmailInput = document.getElementById('email');
-const usernameInput = document.getElementById('username');
+const signupUsernameInput = document.getElementById('username');
 const signupPasswordInput = document.getElementById('password');
 
 // Get login form elements
@@ -30,48 +29,61 @@ const loginForm = document.getElementById('login-form');
 const loginEmailInput = document.getElementById('loginemail');
 const loginPasswordInput = document.getElementById('loginpassword');
 
+
+const loadingOverlay = document.getElementById('loadingOverlay');
+
+function showLoading() {
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('hidden');
+    }
+}
+
+function hideLoading() {
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('hidden');
+    }
+}
+
+
+
 // Event listener for signup form submission
 if (signupForm) {
     signupForm.addEventListener('submit', function (event) {
-        event.preventDefault(); 
+        event.preventDefault();
 
-        const tupId = tupIdInput.value;
         const email = signupEmailInput.value;
-        const username = usernameInput.value;
+        const username = signupUsernameInput.value;
         const password = signupPasswordInput.value;
 
-        // Basic validation before attempting Firebase operation
-        if (!email || !password || !username || !tupId) {
-            showMessageBox('Error', 'All fields are required for signup.');
-            triggerShakeAnimation(signupForm); // Shake the signup form
+    
+        if (!email || !username || !password) {
+            showMessageBox('Error', 'Email, username, and password are required for signup.');
+            triggerShakeAnimation(signupForm);
             return;
         }
 
-        // Create user with email and password
+        showLoading();
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                // Signed up
                 const user = userCredential.user;
-                // Store additional user data in Firestore
-                return setDoc(doc(db, "users", user.uid), {
-                    email: user.email,
-                    uid: user.uid,
-                    displayName: username,
-                    tupId: tupId,
-                });
+                console.log("User signed up:", user);
+
+
+                return updateProfile(user, { displayName: username });
             })
             .then(() => {
-                console.log("User signed up and data saved to Firestore successfully!");
-                // Replaced alert with showMessageBox
-                showMessageBox('Sign Up Successful', 'You have successfully signed up! Please log in.', () => {
-                    window.location.href = "login.html"; 
-                });
+                window.location.href = "login.html";
             })
             .catch((error) => {
                 const errorMessage = error.message;
                 console.error("Signup Error:", error);
-                // Replaced alert with showMessageBox and added shake
                 showMessageBox('Signup Error', 'Failed to sign up: ' + errorMessage);
-                triggerShakeAnimation(signupForm); // Shake the signup form on error
+                triggerShakeAnimation(signupForm);
+            })
+            .finally(() => {
+                hideLoading();
             });
     });
 }
@@ -79,32 +91,34 @@ if (signupForm) {
 // Event listener for login form submission
 if (loginForm) {
     loginForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
         const loginemail = loginEmailInput.value;
         const loginpassword = loginPasswordInput.value;
 
-        // Basic validation before attempting Firebase operation
         if (!loginemail || !loginpassword) {
             showMessageBox('Error', 'Email and password are required for login.');
-            triggerShakeAnimation(loginForm); // Shake the login form
+            triggerShakeAnimation(loginForm);
             return;
         }
+
+        showLoading();
 
         signInWithEmailAndPassword(auth, loginemail, loginpassword)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
                 console.log("User logged in:", user);
-                // No explicit success message here, as it directly redirects
-                window.location.href = "index.html"; 
+                window.location.href = "index.html";
             })
             .catch((error) => {
                 const errorMessage = error.message;
                 console.error("Login Error:", error);
-                // Replaced alert with showMessageBox and added shake
                 showMessageBox('Login Error', 'Failed to log in: ' + errorMessage);
-                triggerShakeAnimation(loginForm); // Shake the login form on error
+                triggerShakeAnimation(loginForm);
+            })
+            .finally(() => {
+                hideLoading();
             });
     });
 }

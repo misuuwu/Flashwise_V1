@@ -1,8 +1,8 @@
    /* Custom styles for the contact page, if needed, to match the dashboard's aesthetic */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color); /* Assuming a CSS variable for background */
-            color: var(--text-color); /* Assuming a CSS variable for text color */
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -14,17 +14,17 @@
             justify-content: center;
             align-items: center;
             flex-grow: 1;
-            padding: 1rem; /* Added padding for smaller screens */
+            padding: 1rem; 
         }
 
         .contact-card {
-            background-color: var(--card-bg); /* Assuming a CSS variable for card background */
-            border: 2px solid var(--border-color); /* Assuming a CSS variable for border color */
-            border-radius: 0.75rem; /* rounded-lg */
-            box-shadow: 4px 4px 0px 0px var(--shadow-color); /* Custom shadow to match dashboard panels */
-            padding: 2.5rem; /* p-10 */
+            background-color: var(--card-bg); 
+            border: 2px solid var(--border-color); 
+            border-radius: 0.75rem; 
+            box-shadow: 4px 4px 0px 0px var(--shadow-color); 
+            padding: 2.5rem; 
             width: 100%;
-            max-width: 50rem; /* Increased max-width for wider container */
+            max-width: 50rem; 
             text-align: center;
         }
 
@@ -33,11 +33,11 @@
         input[type="email"],
         textarea {
             width: 100%;
-            padding: 0.75rem 1rem; /* py-3 px-4 */
-            margin-bottom: 1rem; /* mb-4 */
+            padding: 0.75rem 1rem; 
+            margin-bottom: 1rem; 
             border: 1px solid var(--border-color);
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: var(--input-bg); /* Assuming a CSS variable for input background */
+            border-radius: 0.5rem; 
+            background-color: var(--input-bg); 
             color: var(--text-color);
             box-shadow: inset 1px 1px 0px 0px var(--shadow-color-light); 
             transition: border-color 0.2s;
@@ -79,13 +79,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 2rem;
-            background-color: var(--header-bg); /* Assuming header background variable */
+            background-color: var(--header-bg); 
             border-bottom: 2px solid var(--border-color);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            border-radius: 0.75rem; /* rounded-lg */
+            border-radius: 0.75rem; 
             margin: 1rem;
-            box-shadow: 4px 4px 0px 0px var(--shadow-color); /* Custom shadow */
-            width: calc(100% - 2rem); /* Stretched to full width minus margin */
+            box-shadow: 4px 4px 0px 0px var(--shadow-color);
+            width: calc(100% - 2rem);
         }
 
         .user-info {
@@ -136,7 +136,7 @@
             --button-text-color: #ffffff;
             --header-bg: #ffffff;
             --input-bg: #f9f9f9;
-            --accent-color: #f7b731; /* Yellowish accent */
+            --accent-color: #f7b731; 
         }
 
         /* Dark mode adjustments (from your styles.css or app.js logic) */

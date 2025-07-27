@@ -71,13 +71,17 @@
                 <div class="flex items-center justify-between mb-6">
                     <span class="text-sm text-gray-600">Already have an account? <a href="login.html"
                             class="link-text">Log In</a></span>
-                    <br>
-                    <span class="text-sm text-gray-600">Terms and Conditions<a href="terms.html" class="link-text">Terms
-                            and Conditions</a></span>
+                    <div>
+                        <span class="text-sm text-gray-600"><a href="terms.html" class="link-text">Terms and Conditions</a></span>
+                    </div>
                     <input type="submit" class="btn-primary" id="signup-submit" value="Sign Up"></input>
                 </div>
             </form>
         </div>
+    </div>
+
+    <div id="loadingOverlay" class="hidden loading-overlay">
+        <div class="spinner"></div>
     </div>
 
     <script type="module" src="firebase.js"></script>

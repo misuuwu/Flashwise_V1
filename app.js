@@ -23,23 +23,23 @@ const importDeckBtn = document.getElementById('import-deck-btn');
 
 // Deck Management specific elements (Corrected IDs to match index.html)
 const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
-const currentDeckNameDisplay = document.getElementById('current-deck-name'); 
-const deckCardCountDisplay = document.getElementById('deck-card-count'); 
-const deckDefaultTimerDisplay = document.getElementById('deck-default-timer'); 
-const addNewCardBtn = document.getElementById('add-new-card-btn'); 
-const currentDeckCardsList = document.getElementById('current-deck-cards-list'); 
-const modeFlashcardsRadio = document.getElementById('mode-flashcards'); 
-const modeQuizRadio = document.getElementById('mode-quiz'); 
-const sessionQuizTimerInput = document.getElementById('session-quiz-timer'); 
-const startModeBtn = document.getElementById('start-mode-btn'); 
+const currentDeckNameDisplay = document.getElementById('current-deck-name');
+const deckCardCountDisplay = document.getElementById('deck-card-count');
+const deckDefaultTimerDisplay = document.getElementById('deck-default-timer');
+const addNewCardBtn = document.getElementById('add-new-card-btn');
+const currentDeckCardsList = document.getElementById('current-deck-cards-list');
+const modeFlashcardsRadio = document.getElementById('mode-flashcards');
+const modeQuizRadio = document.getElementById('mode-quiz');
+const sessionQuizTimerInput = document.getElementById('session-quiz-timer');
+const startModeBtn = document.getElementById('start-mode-btn');
 
 // Quiz specific elements (already largely correct, but ensure consistency)
 const quizTimerDisplay = document.getElementById('quiz-timer');
-const quizScoreDisplay = document.getElementById('quiz-score'); 
-const quizCardWrapper = document.getElementById('quiz-card-wrapper'); 
-const quizCard = document.getElementById('quiz-card'); 
-const quizQuestion = document.getElementById('quiz-question'); 
-const quizAnswer = document.getElementById('quiz-answer'); 
+const quizScoreDisplay = document.getElementById('quiz-score');
+const quizCardWrapper = document.getElementById('quiz-card-wrapper');
+const quizCard = document.getElementById('quiz-card');
+const quizQuestion = document.getElementById('quiz-question');
+const quizAnswer = document.getElementById('quiz-answer');
 const quizImageFront = document.getElementById('quiz-image-front');
 const quizImageBack = document.getElementById('quiz-image-back');
 const prevCardBtn = document.getElementById('prev-card-btn');
@@ -57,7 +57,7 @@ let quizTimeRemaining;
 let quizMode = 'flashcards';
 let correctAnswersCount = 0;
 let totalQuestionsAnswered = 0;
-let currentQuizDeckName = null; 
+let currentQuizDeckName = null;
 
 // Modal elements (existing, ensure IDs match index.html)
 const createDeckModal = document.getElementById('createDeckModal');
@@ -176,6 +176,26 @@ function triggerShakeAnimation(element) {
 }
 
 
+let loadingPromise = Promise.resolve();
+const MIN_LOADING_TIME = 5000;
+
+
+function showLoading() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('hidden');
+    }
+    loadingPromise = new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME));
+}
+
+async function hideLoading() {
+    await loadingPromise;
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('hidden');
+    }
+}
+
 // --- Global Page Visibility & Routing (Crucial for Firebase Auth) ---
 
 function hideAllAppPages() {
@@ -201,18 +221,22 @@ function initDashboardListeners() {
     if (hasInitializedDashboardListeners) return; // Prevent re-initialization
 
     // --- Logout Button Listener ---
-    if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                console.log("User signed out successfully.");
-                showMessageBox('Logged Out', 'You have been logged out successfully.');
-            }).catch((error) => {
-                console.error("Error signing out:", error);
-                showMessageBox('Error', 'Error logging out: ' + error.message);
-            });
-        });
-    }
+if (logoutButton) {
+    logoutButton.addEventListener('click', () => {
+        showLoading(); // Show loading animation immediately
 
+        signOut(auth).then(() => {
+            console.log("User signed out successfully.");
+            
+           
+        }).catch((error) => {
+            console.error("Error signing out:", error);
+            showMessageBox('Error', 'Error logging out: ' + error.message);
+        }).finally(() => {
+            hideLoading(); 
+        });
+    });
+}
     // --- Night Mode Toggle Functionality ---
     if (nightModeToggle) {
         nightModeToggle.addEventListener('click', () => {
@@ -464,8 +488,6 @@ function initDashboardListeners() {
                     }
                     const currentCards = deckDoc.data().cards || [];
                     deleteCardFromDeck(currentManagingDeckId, currentEditingCardIndex, currentCards);
-                    // The createCardModal will be hidden by deleteCardFromDeck's confirm callback
-                    // No need to hide it immediately here
                 } catch (error) {
                     console.error("Error preparing to delete card:", error);
                     showMessageBox('Error', 'Failed to delete card: ' + error.message);
@@ -500,12 +522,12 @@ function initDashboardListeners() {
             showMessageBox(
                 'Import Deck',
                 'Please enter the Share ID of the deck you want to import:',
-                null, 
-                true, 
-                'text', 
-                'Enter Share ID here', 
-                'Share ID:', 
-                (inputValue) => { 
+                null,
+                true,
+                'text',
+                'Enter Share ID here',
+                'Share ID:',
+                (inputValue) => {
                     if (inputValue) {
                         importDeck(inputValue.trim()); // Pass the trimmed input value
                     } else {
@@ -528,7 +550,7 @@ function initDashboardListeners() {
             quizCard.classList.toggle('flipped');
 
             if (quizCard.classList.contains('flipped')) {
-            
+
                 if (card.imageUrl) {
                     // Use quizImageBack for the image on the flipped side
                     if (quizImageBack) {
@@ -579,7 +601,7 @@ function initDashboardListeners() {
                     if (quizFeedbackDisplay) quizFeedbackDisplay.classList.add('hidden');
                 }
             } else {
-            
+
                 if (card.imageUrl) {
                     if (quizImageFront) {
                         quizImageFront.src = card.imageUrl;
@@ -598,8 +620,8 @@ function initDashboardListeners() {
                 }
 
                 if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden');
-                if (quizFeedbackDisplay) quizFeedbackDisplay.classList.add('hidden'); 
-                if (quizAnswer) quizAnswer.classList.add('hidden'); 
+                if (quizFeedbackDisplay) quizFeedbackDisplay.classList.add('hidden');
+                if (quizAnswer) quizAnswer.classList.add('hidden');
             }
         });
     }
@@ -631,12 +653,12 @@ function initDashboardListeners() {
 
     if (finishQuizBtn) {
         finishQuizBtn.addEventListener('click', () => {
-            finishQuiz('manual'); 
+            finishQuiz('manual');
         });
     }
 
-    console.log("Dashboard listeners initialized."); 
-    hasInitializedDashboardListeners = true; 
+    console.log("Dashboard listeners initialized.");
+    hasInitializedDashboardListeners = true;
 }
 
 
@@ -871,18 +893,54 @@ async function openShareDeckModal(deckId) {
             cards: deckToShare.cards,
             ownerId: deckToShare.ownerId,
             ownerDisplayName: deckToShare.ownerDisplayName,
-            shareId: deckToShare.shareId 
-        }, { merge: true }); 
+            shareId: deckToShare.shareId
+        }, { merge: true });
 
-        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`; 
+        const shareLink = `${window.location.origin}/index.html?shareDeckId=${deckToShare.shareId}`;
         if (shareDeckLinkInput) shareDeckLinkInput.value = shareLink;
         shareDeckModal?.classList.remove('hidden');
-        renderSharedFlashcardSets(); 
+        renderSharedFlashcardSets();
         showMessageBox('Deck Shared!', 'Your deck is now shareable. Copy the link!');
 
     } catch (error) {
         console.error("Error sharing deck:", error);
         showMessageBox('Error', 'Failed to share deck: ' + error.message);
+    }
+}
+
+// Edit Deck name Modal
+async function openEditDeckModal(deckId) {
+    if (!auth.currentUser) {
+        showMessageBox('Error', 'Please log in to edit decks.');
+        return;
+    }
+    try {
+        const deckRef = doc(db, "decks", deckId);
+        const deckDoc = await getDoc(deckRef);
+
+        if (!deckDoc.exists() || deckDoc.data().ownerId !== auth.currentUser.uid) {
+            showMessageBox('Error', 'Deck not found or you do not have permission to edit it.');
+            return;
+        }
+
+        const deckData = deckDoc.data();
+        currentManagingDeckId = deckId; // Set the ID of the deck being edited
+
+        // Populate the modal fields
+        if (document.getElementById('createDeckModalTitle')) {
+            document.getElementById('createDeckModalTitle').textContent = 'Edit Deck';
+        }
+        if (newDeckNameInput) {
+            newDeckNameInput.value = deckData.name || '';
+        }
+        if (newDeckTimerInput) {
+            newDeckTimerInput.value = deckData.defaultTimer || '60';
+        }
+
+        createDeckModal.classList.remove('hidden'); // Show the modal
+    } catch (error) {
+        console.error("Error opening edit deck modal:", error);
+        showMessageBox('Error', 'Failed to load deck for editing: ' + error.message);
     }
 }
 
@@ -1186,10 +1244,10 @@ async function deleteFlashcardDeck(deckId) {
     showMessageBox(
         'Confirm Deletion',
         'Are you sure you want to delete this deck and all its cards? This action cannot be undone.',
-        null, // No onOkCallback
-        false, // No input field
-        'text', null, null, // Default values for input related parameters
-        async () => { // onConfirmCallback (Yes)
+        null,
+        false,
+        'text', null, null,
+        async () => {
             try {
                 // First, check if the user owns the deck
                 const deckRef = doc(db, "decks", deckId);
@@ -1292,7 +1350,6 @@ function renderQuizCard() {
     // Hide choice buttons and feedback when rendering a new card (before flip)
     if (quizChoiceButtons) quizChoiceButtons.classList.add('hidden');
     if (quizFeedbackDisplay) quizFeedbackDisplay.classList.add('hidden');
-    // Ensure answer text is hidden on question side for all modes initially
     if (quizAnswer) quizAnswer.classList.add('hidden');
 
     // Update navigation button states
@@ -1335,9 +1392,9 @@ function updateQuizScoreDisplay() {
 
 function recordAnswer(isCorrect, chosenAnswer = '') {
     const currentCard = currentQuizSet[currentCardIndex];
-    if (currentCard.answered) return; 
+    if (currentCard.answered) return;
 
-    currentCard.answered = true; 
+    currentCard.answered = true;
     totalQuestionsAnswered++;
 
     if (isCorrect) {

@@ -34,15 +34,15 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
         messageBoxInputLabel.textContent = inputLabel;
         messageBoxInput.placeholder = inputPlaceholder;
         messageBoxInput.type = inputType;
-        messageBoxInput.focus(); // Focus the input field
+        messageBoxInput.focus(); 
 
         // Only show OK button for input dialog
         messageBoxOkBtn.classList.remove('hidden');
         messageBoxOkBtn.onclick = () => {
             const inputValue = messageBoxInput.value.trim();
-            messageBox.classList.add('hidden'); // Hide the modal
+            messageBox.classList.add('hidden'); 
             if (onConfirmOrOkCallback) {
-                onConfirmOrOkCallback(inputValue); // Pass input value to callback
+                onConfirmOrOkCallback(inputValue); 
             }
         };
         messageBoxModalCloseX.onclick = () => {
@@ -56,7 +56,7 @@ function showMessageBox(title, message, onConfirmOrOkCallback = null, isConfirm 
 
         // Attach event listener for 'Yes' button
         messageBoxConfirmYesBtn.onclick = () => {
-            messageBox.classList.add('hidden'); // Hide the modal
+            messageBox.classList.add('hidden'); 
             if (onConfirmOrOkCallback) {
                 onConfirmOrOkCallback(); 
             }
@@ -91,7 +91,7 @@ function triggerShakeAnimation(element) {
     // Remove the shake class after the animation completes
     element.addEventListener('animationend', () => {
         element.classList.remove('shake');
-    }, { once: true }); // Use { once: true } to automatically remove the listener after it fires
+    }, { once: true }); 
 }
 
 

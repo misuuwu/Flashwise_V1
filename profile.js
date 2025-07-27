@@ -1,10 +1,10 @@
-// --- Logic specific to the Profile Page (profile.html) ---
-import { auth, db } from './firebase.js'; // Import auth and db
+
+import { auth, db } from './firebase.js';
 import { doc, getDoc, collection, query, where, orderBy, getDocs, setDoc, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // FIX: Apply saved theme preference on profile page load
+
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const profilePage = document.getElementById('profile-page');
 
-    if (!profilePage) return; // Exit if not on the profile page
+    if (!profilePage) return;
 
     const profileDisplayUsername = document.getElementById('profile-display-username');
     const profileDisplayId = document.getElementById('profile-display-id');
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabQuizHistory = document.getElementById('tab-quiz-history');
     const tabDecks = document.getElementById('tab-decks');
     const profileContentArea = document.getElementById('profile-content-area');
-    const clearHistoryButtonContainer = document.getElementById('clear-history-button-container'); // Get the new container
+    const clearHistoryButtonContainer = document.getElementById('clear-history-button-container');
 
-    let currentUserData = null; // Store current user's Firestore data
+    let currentUserData = null;
 
     // Helper function to update user profile display
     function updateProfileDisplay(userDoc) {
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderSessionHistory(userId) {
         if (!profileContentArea) return;
         profileContentArea.innerHTML = '<p class="text-center text-gray-500">Loading session history...</p>';
-        if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button while loading
+        if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden');
 
         try {
             const historyQuery = query(
@@ -59,9 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let historyHtml = '';
             if (querySnapshot.empty) {
                 historyHtml = '<p class="text-center text-gray-500">No session history found.</p>';
-                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Ensure hidden if no history
+                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); 
             } else {
-               
+
                 historyHtml = '<div class="flex flex-wrap gap-4 justify-start">';
 
                 querySnapshot.forEach((doc) => {
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ? `<p class="text-gray-600 text-sm">Score: ${session.score}/${session.totalQuestions}</p>`
                         : '';
 
-                    // Adjusted width to fit 3 items per row with a gap of 1rem (tailwind gap-4)
+
                     historyHtml += `
                         <div class="w-[calc((100%-32px)/3)] min-w-[18rem] rounded-lg border border-gray-200 bg-white p-4 shadow-md">
                             <h3 class="truncate font-semibold text-lg">${session.deckName}</h3>
@@ -82,22 +82,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 });
                 historyHtml += '</div>';
-                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.remove('hidden'); // Show button if history exists
+                if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.remove('hidden');
             }
 
             profileContentArea.innerHTML = historyHtml;
 
-            // Attach event listener to the clear history button (it's now outside profileContentArea)
+
             const clearHistoryBtn = document.getElementById('clear-history-btn');
             if (clearHistoryBtn) {
-                clearHistoryBtn.removeEventListener('click', clearSessionHistory); 
+                clearHistoryBtn.removeEventListener('click', clearSessionHistory);
                 clearHistoryBtn.addEventListener('click', () => clearSessionHistory(userId));
             }
 
         } catch (error) {
             console.error("Error loading session history:", error);
             profileContentArea.innerHTML = `<p class="text-red-500 text-center">Error loading session history: ${error.message}. Please check your browser's console for more details, and ensure you have the necessary Firestore indexes configured.</p>`;
-            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); 
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden');
         }
     }
 
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await batch.commit();
 
             alert("Session history cleared successfully!");
-            renderSessionHistory(userId); // Re-render to show empty history
+            renderSessionHistory(userId);
         } catch (error) {
             console.error("Error clearing session history:", error);
             alert("Failed to clear session history: " + error.message);
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderUserDecks(userId) {
         if (!profileContentArea) return;
         profileContentArea.innerHTML = '<p class="text-center text-gray-500">Loading your decks...</p>';
-        if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button when not on history tab
+        if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden');
 
         try {
             const q = query(collection(db, "decks"), where("ownerId", "==", userId));
@@ -149,13 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Use flex, flex-wrap, gap-4 for wrapping layout for decks too
             let decksHtml = '<div class="flex flex-wrap gap-4 justify-start">';
             querySnapshot.forEach((doc) => {
                 const deck = doc.data();
-                // Check if 'isShared' exists and is true, otherwise default to 'Private'
+
                 const visibility = deck.isShared ? 'Shared' : 'Private';
-                // Adjusted width to fit 3 items per row with a gap of 1rem (tailwind gap-4)
+
                 decksHtml += `
                     <div class="w-[calc((100%-32px)/3)] min-w-[18rem] p-4 bg-white rounded-lg shadow-md border border-gray-200">
                         <h3 class="font-semibold text-lg truncate">${deck.name}</h3>
@@ -190,11 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (activeTab === 'decks') {
             tabDecks?.classList.add('active-tab', 'border-black', 'text-black');
             tabDecks?.classList.remove('text-gray-500', 'border-gray-200');
-            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); 
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden');
             await renderUserDecks(userId);
         } else {
             profileContentArea.innerHTML = '<p class="text-center text-gray-500">Select a tab to view content.</p>';
-            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden'); // Hide button by default
+            if (clearHistoryButtonContainer) clearHistoryButtonContainer.classList.add('hidden');
         }
     }
 
@@ -265,18 +264,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (userDocSnap.exists()) {
                     currentUserData = userDocSnap.data();
                     updateProfileDisplay(currentUserData);
-                    // Automatically load session history when profile page loads
                     renderProfileContent(user.uid, 'quiz-history');
                 } else {
                     console.log("Profile page: No user data found in Firestore for UID:", user.uid);
-                    // Fallback to email if no display name
                     currentUserData = { displayName: user.email, tupId: 'N/A', bio: 'No bio yet.' };
                     updateProfileDisplay(currentUserData);
                     renderProfileContent(user.uid, 'quiz-history');
                 }
             } catch (error) {
                 console.error("Profile page: Error fetching user data:", error);
-                // Fallback to email if error occurs
                 currentUserData = { displayName: user.email, tupId: 'N/A', bio: 'No bio yet.' };
                 updateProfileDisplay(currentUserData);
                 renderProfileContent(user.uid, 'quiz-history');
@@ -284,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // User is signed out
             console.log("Profile page: User is logged out.");
-            // Redirect to login page if not already there
             if (window.location.pathname !== '/login.html' && window.location.pathname !== '/signup.html') {
                 window.location.href = 'login.html';
             }
